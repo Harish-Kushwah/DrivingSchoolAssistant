@@ -23,17 +23,16 @@
         <!-- https://mvnrepository.com/artifact/com.kitfox.svg/svg-salamander -->
 
 
-        <dependency>
+           <dependency>
             <groupId>com.formdev</groupId>
             <artifactId>flatlaf</artifactId>
-            <version>3.2</version>
-            <type>jar</type>
+            <version>3.4.1</version>
         </dependency>
+
         <dependency>
             <groupId>com.formdev</groupId>
             <artifactId>flatlaf-extras</artifactId>
-            <version>3.2</version>
-            <type>jar</type>
+            <version>3.4.1</version>
         </dependency>
         <dependency>
             <groupId>com.formdev</groupId>
@@ -108,7 +107,11 @@
     <artifactId>jna</artifactId>
     <version>5.14.0</version>
 </dependency>
-
+ <dependency>
+            <groupId>mylibrary</groupId>
+            <artifactId>swing-tost</artifactId>
+            <version>0.55</version>
+        </dependency>
     </dependencies>
     <name>DrivingSchoolAssistant</name>
 </project>
