@@ -1,10 +1,13 @@
 package pdf;
 
+import java.util.ArrayList;
+
 
 /**
  *
  * @author MATOSHRI
  */
+
 public class Application {
     private String officeName,applicationNo,apllicantName,date,DOB,reciptTransactionType,COV;
     private String receiptDate,receiptNo,bankGateway,bankReferenceNo,transactionID;
@@ -13,7 +16,7 @@ public class Application {
     public String getLicenceType() {
         return licenceType;
     }
-
+   
     public void setLicenceType(String licenceType) {
         this.licenceType = licenceType;
     }
@@ -92,7 +95,31 @@ public class Application {
         this.transactionID = transactionID;
     }
     public String getCOV() {
+       
         return COV;
+    }
+    public ArrayList<String> getSelectedCOV()
+    {   ArrayList<String> selected = new ArrayList();
+        String covs[] = COV.split(",");
+   
+        for(String c : covs){
+            System.out.println(c);
+           if(c.startsWith("Motor Cycle with Gear")){
+            selected.add("MCWG");
+          }
+           if(c.startsWith("LIGHT MOTOR")){
+            selected.add("LMV");
+          }
+           if(c.startsWith("LMV-")){
+            selected.add("LMV-TR");
+          }
+           if(c.startsWith("Transport Vehical-M/HMV")){
+            selected.add("Trans");
+          }
+          
+        }
+         
+        return selected;
     }
 
     public void setCOV(String COV) {
@@ -106,10 +133,15 @@ public class Application {
     public void setReciptTransactionType(String reciptTransactionType) {
         this.reciptTransactionType = reciptTransactionType;
     }
-
-  
-    
-
+    public int getApplicationTypeIndex(){
+        if(reciptTransactionType.startsWith("ISSUE NEW LL")){
+            return 0;  //NEW LEARNING 
+        }
+        else if(reciptTransactionType.startsWith("ISSUE NEW DL")){
+            return 1;  //NEW LEARNING 
+        }
+        return 2;
+    }
     public String getApplicationNo() {
         return applicationNo;
     }
@@ -118,13 +150,14 @@ public class Application {
         this.applicationNo = applicationNo;
     }
 
-    public String getApllicantName() {
-        return apllicantName;
+    public FullName getApllicantName() {
+        return new FullName(apllicantName);
     }
 
     public void setApllicantName(String apllicantName) {
         this.apllicantName = apllicantName;
     }
+    
 
     public String getDate() {
         return date;

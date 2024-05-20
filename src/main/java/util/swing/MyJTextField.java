@@ -37,4 +37,14 @@ public class MyJTextField extends JTextField {
             }
         });
     }
+    public void setMyText(String text)
+    {
+        setText(text);
+        setForeground(Color.black);
+    }
+    public void setPlaceholder(String text)
+    {
+        setText(text);
+        setForeground(Color.GRAY);
+    }
 }

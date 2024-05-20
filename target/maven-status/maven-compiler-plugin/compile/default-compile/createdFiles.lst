@@ -4,7 +4,9 @@ javaswingdev\menu\Item$2.class
 javaswingdev\main\Main$2.class
 javaswingdev\form\Form_SearchApplications.class
 javaswingdev\swing\titlebar\TitleBar$6.class
+raven\combobox\ComboBoxMultiSelection$ComboBoxMultiUI$MultiComboPopup.class
 javaswingdev\system\SystemFonts.class
+raven\combobox\ComboBoxMultiSelection$ComboBoxMultiCellRenderer.class
 javaswingdev\form\Form_Dashboard.class
 javaswingdev\swing\titlebar\TitleBar$2.class
 javaswingdev\swing\titlebar\TitleBar.class
@@ -26,6 +28,7 @@ javaswingdev\form\Form_DeleteApplications.class
 javaswingdev\system\SystemColor.class
 jnafilechooser\api\WindowsFileChooser.class
 javaswingdev\system\SystemUI.class
+raven\combobox\ComboBoxMultiSelection$ComboBoxMultiCellEditor.class
 javaswingdev\swing\scroll\ModernScrollBarUI$InvisibleScrollBarButton.class
 javaswingdev\card\ModelCard.class
 javaswingdev\menu\MenuItem.class
@@ -41,10 +44,12 @@ javaswingdev\form\Form_FilterApplications.class
 javaswingdev\menu\MenuItem$3.class
 pdf\ExtractReciptDetails.class
 javaswingdev\card\LabelIcon.class
+pdf\FullName.class
 javaswingdev\swing\titlebar\TitleBar$1.class
 javaswingdev\swing\table\Table$2.class
 util\swing\MyTitle.class
 javaswingdev\menu\EventMenuSelected.class
+raven\combobox\ComboBoxMultiSelection$Item.class
 javaswingdev\menu\Menu.class
 javaswingdev\menu\Item$1.class
 javaswingdev\swing\scroll\ModernScrollBarUI.class
@@ -62,9 +67,12 @@ jnafilechooser\win32\Shell32$BrowseInfo.class
 javaswingdev\swing\RoundPanel.class
 javaswingdev\swing\table\TablePanel.class
 javaswingdev\main\Main.class
+raven\combobox\ComboBoxMultiSelection.class
 jnafilechooser\api\JnaFileChooser$Mode.class
 javaswingdev\form\Form_AddNewTransaction.class
 javaswingdev\menu\MenuItem$4.class
+raven\combobox\ComboBoxMultiSelection$CheckBoxIcon.class
+raven\combobox\ComboBoxMultiSelection$ComboBoxMultiUI.class
 util\swing\button\MyDeleteButton.class
 util\swing\MyJTextField$1.class
 javaswingdev\card\Card.class
