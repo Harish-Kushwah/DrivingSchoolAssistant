@@ -23,7 +23,7 @@
         <!-- https://mvnrepository.com/artifact/com.kitfox.svg/svg-salamander -->
 
 
-           <dependency>
+        <dependency>
             <groupId>com.formdev</groupId>
             <artifactId>flatlaf</artifactId>
             <version>3.4.1</version>
@@ -102,16 +102,22 @@
         </dependency>
         
         <!-- https://mvnrepository.com/artifact/net.java.dev.jna/jna -->
-<dependency>
-    <groupId>net.java.dev.jna</groupId>
-    <artifactId>jna</artifactId>
-    <version>5.14.0</version>
-</dependency>
- <dependency>
+        <dependency>
+            <groupId>net.java.dev.jna</groupId>
+            <artifactId>jna</artifactId>
+            <version>5.14.0</version>
+        </dependency>
+        <dependency>
             <groupId>mylibrary</groupId>
             <artifactId>swing-tost</artifactId>
             <version>0.55</version>
         </dependency>
+         <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.6.0</version>
+        </dependency>
+        
     </dependencies>
     <name>DrivingSchoolAssistant</name>
 </project>

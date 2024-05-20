@@ -5,6 +5,7 @@ import javaswingdev.swing.RoundPanel;
 import javaswingdev.swing.table.TablePanel;
 import javaswingdev.system.SystemColor;
 import javaswingdev.system.SystemFonts;
+import javaswingdev.system.SystemStrings;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -67,10 +68,10 @@ public class Form_UpdateApplications extends CrazyPanel {
         inputPanel.add(new JLabel("Application No"),"al right");
         inputPanel.add(new MyJTextField("Enter Application No.") ,"growx,al right");
         inputPanel.add(new JLabel("COV"),"al right");
-        inputPanel.add(new JComboBox(new String[]{"LMV", "LMV-Tr", "Trans", "3W-GV"}), "growx,al right");
+        inputPanel.add(new JComboBox(SystemStrings.COV), "growx,al right");
 
         inputPanel.add(new JLabel("Date"),"al right");
-       inputPanel.add(new MyJTextField("11/11/2024") ,"wrap 15,growx,al right");
+       inputPanel.add(new MyJTextField(SystemStrings.APPLICATION_DATE) ,"wrap 15,growx,al right");
         
 
                 
@@ -161,7 +162,7 @@ public class Form_UpdateApplications extends CrazyPanel {
         //----------
         infoOutputPanel.add(new MyJTextField("Rs.2000"),"growx");
         infoOutputPanel.add(new MyJTextField("Rs.1500"),"growx");
-        infoOutputPanel.add(new JComboBox(new String[]{"Pending", "Completed"}),"wrap,growx");
+        infoOutputPanel.add(new JComboBox(SystemStrings.PAYMENT_STATUS),"wrap,growx");
         
         infoOutputPanel.add(new JLabel(""),"al left,growx");
         infoOutputPanel.add(new JLabel(""),"al left,growx");
@@ -174,7 +175,7 @@ public class Form_UpdateApplications extends CrazyPanel {
         //----------
         infoOutputPanel.add(new MyJTextField("11224457856"),"growx");
         infoOutputPanel.add(new MyJTextField("28936/4576"),"growx");
-        infoOutputPanel.add(new JComboBox(new String[]{"Pending", "Completed"}),"wrap,growx");
+        infoOutputPanel.add(new JComboBox(SystemStrings.APPLICATION_STATUS),"wrap,growx");
         //===========
         
         infoOutputPanel.add(getInfoLabel("If Application Available"),"al left,wrap 17,growx,span");

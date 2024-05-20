@@ -6,6 +6,7 @@ import javaswingdev.swing.scroll.ScrollBar;
 import javaswingdev.swing.table.TablePanel;
 import javaswingdev.system.SystemColor;
 import javaswingdev.system.SystemFonts;
+import javaswingdev.system.SystemStrings;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -62,9 +63,9 @@ public class Form_SearchApplications extends CrazyPanel {
         inputPanel.add(new JLabel("Name"),"al right");
         inputPanel.add(new MyJTextField("Enter Name") ,"growx,al right");
         inputPanel.add(new JLabel("Application No"),"al right");
-        inputPanel.add(new MyJTextField("Enter Application No.") ,"growx,al right");
+        inputPanel.add(new MyJTextField(SystemStrings.APPLICATION_NO) ,"growx,al right");
         inputPanel.add(new JLabel("COV"),"al right");
-        inputPanel.add(new JComboBox(new String[]{"LMV", "LMV-Tr", "Trans", "3W-GV"}), "growx,al right");
+        inputPanel.add(new JComboBox(SystemStrings.COV), "growx,al right");
 
         inputPanel.add(new JLabel("Date"),"al right");
         inputPanel.add(new MyJTextField("11/11/2024") ,"wrap 15,growx,al right");
@@ -78,7 +79,7 @@ public class Form_SearchApplications extends CrazyPanel {
 
         buttonPanel1.setBackground(Color.white);
         buttonPanel1.add(new MyResetButton("Clear"), "al right");
-        buttonPanel1.add(new MySubmitButton("Update"), "al left,wrap");
+        buttonPanel1.add(new MySubmitButton("Search"), "al left,wrap");
         buttonPanel1.setBackground(Color.white);
         
         inputPanel.add(buttonPanel1,"span,growx");
