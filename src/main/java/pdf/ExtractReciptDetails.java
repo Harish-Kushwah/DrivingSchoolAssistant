@@ -1,5 +1,6 @@
 package pdf;
 
+import model.entity.Recipt;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.NoSuchFileException;
@@ -12,8 +13,8 @@ import technology.tabula.extractors.SpreadsheetExtractionAlgorithm;
 
 public class ExtractReciptDetails {
 
-    public static Application getApplicationsDetails(File file, int page_no) {
-        Application application = new Application();
+    public static Recipt getApplicationsDetails(File file, int page_no) {
+        Recipt application = new Recipt();
         try {
             PDDocument document = Loader.loadPDF(file);
 

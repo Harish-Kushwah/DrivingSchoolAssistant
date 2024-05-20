@@ -13,6 +13,7 @@ import javaswingdev.form.*;
 import javaswingdev.menu.EventMenuSelected;
 import javaswingdev.system.SystemUI;
 import javax.swing.*;
+import raven.toast.Notifications;
 public class Main extends javax.swing.JFrame {
     
     private static Main main;
@@ -21,6 +22,7 @@ public class Main extends javax.swing.JFrame {
         initComponents();
         init();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        Notifications.getInstance().setJFrame(this);
     }
     
     private void init() {

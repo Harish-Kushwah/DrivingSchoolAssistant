@@ -1,6 +1,7 @@
-package pdf;
+package model.entity;
 
 import java.util.ArrayList;
+import pdf.FullName;
 
 
 /**
@@ -8,7 +9,7 @@ import java.util.ArrayList;
  * @author MATOSHRI
  */
 
-public class Application {
+public class Recipt {
     private String officeName,applicationNo,apllicantName,date,DOB,reciptTransactionType,COV;
     private String receiptDate,receiptNo,bankGateway,bankReferenceNo,transactionID;
     private String licenceType , referenceNo,licenceTypeAndNo;
@@ -180,6 +181,5 @@ public class Application {
         return "Application{" + "officeName=" + officeName + ", applicationNo=" + applicationNo + ", apllicantName=" + apllicantName + ", date=" + date + ", DOB=" + DOB + ", reciptTransactionType=" + reciptTransactionType + ", COV=" + COV + ", receiptDate=" + receiptDate + ", receiptNo=" + receiptNo + ", bankGateway=" + bankGateway + ", bankReferenceNo=" + bankReferenceNo + ", transactionID=" + transactionID + ", licenceType=" + licenceType + ", referenceNo=" + referenceNo + '}';
     }
 
-   
-
+  
 }

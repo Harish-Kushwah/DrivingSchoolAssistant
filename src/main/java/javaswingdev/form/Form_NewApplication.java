@@ -13,6 +13,7 @@ import javaswingdev.main.Main;
 import javaswingdev.swing.RoundPanel;
 import javaswingdev.system.SystemColor;
 import javaswingdev.system.SystemFonts;
+import javaswingdev.system.SystemStrings;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -23,11 +24,13 @@ import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.event.ListDataListener;
 import jnafilechooser.api.JnaFileChooser;
+import model.dao.UserDao;
 import net.miginfocom.swing.MigLayout;
-import pdf.Application;
+import model.entity.Recipt;
+import model.entity.User;
 import pdf.FullName;
 import pdf.ExtractReciptDetails;
-import raven.combobox.ComboBoxMultiSelection;
+import util.swing.ComboBoxMultiSelection;
 import raven.crazypanel.CrazyPanel;
 import raven.toast.Notifications;
 import util.swing.MyJScrollPane;
@@ -43,31 +46,30 @@ import util.swing.button.MySubmitButton;
  */
 public class Form_NewApplication extends CrazyPanel {
 
-    MyJTextField firstNameInput = new MyJTextField("First Name");
-    MyJTextField middleNameInput = new MyJTextField("Middle Name");
-    MyJTextField lastNameInput = new MyJTextField("Last Name");
+    MyJTextField firstNameInput = new MyJTextField(SystemStrings.FIRST_NAME);
+    MyJTextField middleNameInput = new MyJTextField(SystemStrings.MIDDLE_NAME);
+    MyJTextField lastNameInput = new MyJTextField(SystemStrings.LAST_NAME);
 
-    MyJTextField mobileNoInput = new MyJTextField("Enter Mobile No");
-    MyJTextField emailInput = new MyJTextField("Enter Email ");
-    MyJTextField dobInput = new MyJTextField("Enter DOB");
+    MyJTextField mobileNoInput = new MyJTextField(SystemStrings.MOBILE_NO);
+    MyJTextField emailInput = new MyJTextField(SystemStrings.EMAIL);
+    MyJTextField dobInput = new MyJTextField(SystemStrings.DOB);
 
-    MyJTextField applicationNoInput = new MyJTextField("Enter Application No");
+    MyJTextField applicationNoInput = new MyJTextField(SystemStrings.APPLICATION_NO);
     ComboBoxMultiSelection covInput = new ComboBoxMultiSelection();
-    MyJTextField enrollmentNoInput = new MyJTextField("Enter Enrolment No.");
+    MyJTextField enrollmentNoInput = new MyJTextField(SystemStrings.ENROLMENT_NO);
 
-    JComboBox applicationtStatus = new JComboBox(new String[]{"Pending", "Completed", "Enrolled", "Not Enrolled"});
-    MyJTextField applicationDate = new MyJTextField("11-11-2024");
-    JComboBox applicationtType = new JComboBox(new String[]{"Learning Licence", "Driving Licence", "Other"});
-    DefaultComboBoxModel comboBoxModel = new DefaultComboBoxModel<>(new String[]{"MCWG", "LMV", "LMV-TR", "Trans", "3W-GV"});
+    JComboBox applicationtStatus = new JComboBox(SystemStrings.APPLICATION_STATUS);
+    MyJTextField applicationDate = new MyJTextField(SystemStrings.APPLICATION_DATE);
+    JComboBox applicationtType = new JComboBox(SystemStrings.APPLICATION_TYPE);
 
+    DefaultComboBoxModel comboBoxModel = new DefaultComboBoxModel<>(SystemStrings.COV);
 
-
-    public void setApplicationDetails(Application application) {
+    public void setApplicationDetails(Recipt application) {
         FullName name = application.getApllicantName();
-
         firstNameInput.setMyText(name.getFirstName());
         middleNameInput.setMyText(name.getMiddleName());
         lastNameInput.setMyText(name.getLastName());
+
         dobInput.setMyText(application.getDOB());
         applicationNoInput.setMyText(application.getApplicationNo());
         applicationDate.setMyText(application.getDate());
@@ -76,15 +78,15 @@ public class Form_NewApplication extends CrazyPanel {
     }
 
     public void resetPage() {
-        firstNameInput.setPlaceholder("First Name");
-        middleNameInput.setPlaceholder("Middle Name");
-        lastNameInput.setPlaceholder("Last Name");
-        dobInput.setPlaceholder("Enter DOB");
-        applicationNoInput.setPlaceholder("Enter Application No");
-        applicationDate.setPlaceholder("11-11-2024");
+        firstNameInput.setPlaceholder(SystemStrings.FIRST_NAME);
+        middleNameInput.setPlaceholder(SystemStrings.MIDDLE_NAME);
+        lastNameInput.setPlaceholder(SystemStrings.LAST_NAME);
+        dobInput.setPlaceholder(SystemStrings.DOB);
+        applicationNoInput.setPlaceholder(SystemStrings.APPLICATION_NO);
+        applicationDate.setPlaceholder(SystemStrings.APPLICATION_DATE);
         covInput.clearSelectedItems();
         applicationtType.setSelectedIndex(2);
-   
+
     }
 
     public Form_NewApplication() {
@@ -148,11 +150,13 @@ public class Form_NewApplication extends CrazyPanel {
         panel.add(new MyJTextField("Rs.9999"), "pushx,growx");
         panel.add(new JComboBox(new String[]{"Pending", "Completed"}), "wrap 20,pushx,growx");
 
+        MySubmitButton submitButton = new MySubmitButton("Submit");
         MySubmitButton reciptUploadButton = new MySubmitButton("Upload");
         MyResetButton clearButton = new MyResetButton("Clear");
+
         panel.add(reciptUploadButton, "al left");
         panel.add(clearButton, "split 2, al center");
-        panel.add(new MySubmitButton("Submit"), "wrap");
+        panel.add(submitButton, "wrap");
         panel.add(new JLabel(""), "wrap 50");
 
         add(new MyJScrollPane(panel), "growx");
@@ -165,7 +169,7 @@ public class Form_NewApplication extends CrazyPanel {
             if (fc.showOpenDialog(Main.getMain())) {
                 File f = fc.getSelectedFile();
                 Runnable rh = () -> {
-                    Application application = ExtractReciptDetails.getApplicationsDetails(f, 1);
+                    Recipt application = ExtractReciptDetails.getApplicationsDetails(f, 1);
                     System.out.println(application);
                     if (application.getOfficeName() != null) {
                         resetPage();
@@ -186,6 +190,30 @@ public class Form_NewApplication extends CrazyPanel {
             resetPage();
 
         });
+
+        submitButton.addActionListener((e) -> {
+
+            User user = new User();
+            user.setFirstName(firstNameInput.getText());
+            user.setMiddleName(middleNameInput.getText());
+            user.setLastName(lastNameInput.getText());
+            user.setEmail(emailInput.getText());
+            user.setMobileNumber(mobileNoInput.getText());
+
+            if (user.validate()) {
+                UserDao userDao = new UserDao();
+                if (userDao.addUserDetails(user)) {
+                    Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.TOP_RIGHT, "User details added Successfully");
+                } else {
+                    Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_RIGHT, "User details not added");
+                }
+            }
+            else{
+                Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_RIGHT, user.getVlidationErrorMessage());
+            }
+
+        });
+
     }
 
     private JSeparator createJSeparator() {
@@ -221,7 +249,5 @@ public class Form_NewApplication extends CrazyPanel {
         panel.add(subTitle, "al center");
         panel.add(createJSeparator(), "span,wrap 10 ,pushx,growx");
     }
-
-
 
 }
