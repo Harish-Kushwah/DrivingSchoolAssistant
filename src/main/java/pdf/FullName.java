@@ -1,6 +1,9 @@
 
 package pdf;
 
+import javaswingdev.system.SystemStrings;
+import model.entity.User;
+
 /**
  *
  * @author MATOSHRI
@@ -8,6 +11,7 @@ package pdf;
 public class FullName
 {
     String firstName,middleName,lastName;
+    String fullName;
 
     public String getFirstName() {
         return firstName;
@@ -46,5 +50,22 @@ public class FullName
             this.middleName=names[1];
             this.lastName=names[2];
         }
+    }
+    
+    public FullName(User user)
+    {
+        if(!user.getFirstName().equals(SystemStrings.FIRST_NAME)){
+            this.fullName += user.getFirstName();
+        }
+        if(!user.getMiddleName().equals(SystemStrings.MIDDLE_NAME)){
+            this.fullName += user.getMiddleName();
+        }
+        if(!user.getFirstName().equals(SystemStrings.LAST_NAME)){
+            this.fullName += user.getLastName();
+        }
+    }
+    public String getFullName()
+    {
+        return this.fullName;
     }
 }

@@ -7,8 +7,14 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.jar.Attributes.Name;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javaswingdev.main.Main;
 import javaswingdev.swing.RoundPanel;
 import javaswingdev.system.SystemColor;
@@ -24,7 +30,14 @@ import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.event.ListDataListener;
 import jnafilechooser.api.JnaFileChooser;
+import model.dao.ApplicationCOVDao;
+import model.dao.ApplicationDao;
+import model.dao.COVDao;
+import model.dao.LLApplicationDao;
 import model.dao.UserDao;
+import model.entity.Application;
+import model.entity.ApplicationCOV;
+import model.entity.LLApplication;
 import net.miginfocom.swing.MigLayout;
 import model.entity.Recipt;
 import model.entity.User;
@@ -192,25 +205,7 @@ public class Form_NewApplication extends CrazyPanel {
         });
 
         submitButton.addActionListener((e) -> {
-
-            User user = new User();
-            user.setFirstName(firstNameInput.getText());
-            user.setMiddleName(middleNameInput.getText());
-            user.setLastName(lastNameInput.getText());
-            user.setEmail(emailInput.getText());
-            user.setMobileNumber(mobileNoInput.getText());
-
-            if (user.validate()) {
-                UserDao userDao = new UserDao();
-                if (userDao.addUserDetails(user)) {
-                    Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.TOP_RIGHT, "User details added Successfully");
-                } else {
-                    Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_RIGHT, "User details not added");
-                }
-            }
-            else{
-                Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_RIGHT, user.getVlidationErrorMessage());
-            }
+           saveALLDetails();
 
         });
 
@@ -249,5 +244,98 @@ public class Form_NewApplication extends CrazyPanel {
         panel.add(subTitle, "al center");
         panel.add(createJSeparator(), "span,wrap 10 ,pushx,growx");
     }
+    
+    public void saveALLDetails()
+    {
+       int userId = addUserDetails();
+       if(userId!=-1){
+          int appId = addLLApplicationDetails();
+           if(appId != -1)
+           {
+            if(addCOVDetails(appId) && addApplicationToUserDetails(appId, userId))
+            {
+               Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.TOP_RIGHT, "Application details saved successfully");
+            }
+          }      
+        }
+    }
+    
+    public int addLLApplicationDetails()
+    {
+        
+        LLApplication llapplication  = new LLApplication();
+        llapplication.setApp_no(applicationNoInput.getText());
+        llapplication.setApp_date(getSQLDate(applicationDate.getText()));
+        
+        LLApplicationDao applicationDao = new LLApplicationDao();
+        
+        applicationDao.addLLApplicationDetails(llapplication);
+        return applicationDao.getLLApplication(llapplication.getApp_no()).getId();
+        
+    }
+    public int addUserDetails()
+    {
+        User user = new User();
+        user.setFirstName(firstNameInput.getText());
+        user.setMiddleName(middleNameInput.getText());
+        user.setLastName(lastNameInput.getText());
+        user.setEmail(emailInput.getText());
+        user.setMobileNumber(mobileNoInput.getText());
+
+        if (user.validate()) {
+            UserDao userDao = new UserDao();
+            if (userDao.addUserDetails(user)) {
+                return userDao.getUserDetails(user.getMobileNumber()).getId();
+            }
+        }
+        else{
+            Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_RIGHT, user.getVlidationErrorMessage());
+        }
+        return -1;
+    }
+   
+    public boolean addCOVDetails(int app_id)
+    {
+       List<String> selectedCOV =  covInput.getSelectedItems();
+       COVDao covdao = new COVDao();
+       ApplicationCOV appCov = new ApplicationCOV();
+       ApplicationCOVDao applicationCOVDao = new ApplicationCOVDao();
+       for(String vehical : selectedCOV){
+            appCov.setApp_id(app_id); 
+            appCov.setCov_id(covdao.getCOVId(vehical));
+            if(!applicationCOVDao.addApplicationCOVDetails(appCov)){
+                return false;
+            }
+       }
+       return true;
+    }
+    public boolean addApplicationToUserDetails(int app_id , int user_id)
+    {
+           ApplicationDao appDao = new ApplicationDao();
+           
+           Application application = new Application();
+           application.setApp_type_id(app_id);
+           application.setUser_id(user_id);
+           application.setLicence_type("LL");
+           
+           return appDao.addApplicationDetails(application);
+    }
+    
+     public java.sql.Date getSQLDate(String strDate)
+    {
+        try{
+         SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+         java.util.Date date = sdf1.parse(strDate);
+       
+        java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+        return sqlDate;
+        }
+        catch(Exception exp)
+        {
+            exp.printStackTrace();
+        }
+        return null;
+    }
+            
 
 }

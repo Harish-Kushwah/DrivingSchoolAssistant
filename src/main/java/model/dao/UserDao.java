@@ -6,6 +6,8 @@ package model.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
 import model.entity.User;
 import model.helper.ConnectionProvider;
 
@@ -38,7 +40,64 @@ public class UserDao {
        {
            exp.printStackTrace();
        }
-       return false;
+       return false;     
+   }
+   
+   public User getUserDetails(String mobile_no)
+   {
+       try{
+            connection = ConnectionProvider.getConnection();
+            String sql = "Select * from public.user where mobile_no = ?;";
+            
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, mobile_no);
+           
+            ResultSet set = st.executeQuery();
+            
+            User user = new User();
+            while(set.next()){
+                user.setId(set.getInt("id"));
+                user.setFirstName(set.getString("first_name"));
+                user.setMiddleName(set.getString("middle_name"));
+                user.setLastName(set.getString("last_name"));
+                user.setEmail(set.getString("email"));
+                return user;
+            }
+       }
        
+       catch(Exception exp)
+       {
+           exp.printStackTrace();
+       }
+       return new User();    
+   }
+   
+   public ArrayList<User> getAllUserDetails()
+   {
+       ArrayList<User> list = new ArrayList();
+        try{
+            connection = ConnectionProvider.getConnection();
+            String sql = "Select * from public.user";
+            
+            PreparedStatement st = connection.prepareStatement(sql);
+           
+            ResultSet set = st.executeQuery();
+            
+            while(set.next()){
+                 User user = new User();
+                user.setId(set.getInt("id"));
+                user.setFirstName(set.getString("first_name"));
+                user.setMiddleName(set.getString("middle_name"));
+                user.setLastName(set.getString("last_name"));
+                user.setEmail(set.getString("email"));
+                list.add(user);
+            }
+       }
+       
+       catch(Exception exp)
+       {
+           exp.printStackTrace();
+       }
+        return list;
    }
 }

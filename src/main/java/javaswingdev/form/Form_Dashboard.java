@@ -1,9 +1,16 @@
 package javaswingdev.form;
 
 import java.awt.Color;
+import java.util.ArrayList;
 import javaswingdev.GoogleMaterialDesignIcon;
 import javaswingdev.card.ModelCard;
 import javaswingdev.system.SystemColor;
+import model.dao.ApplicationDao;
+import model.dao.LLApplicationDao;
+import model.dao.UserDao;
+import model.entity.LLApplication;
+import model.entity.User;
+import pdf.FullName;
 
 public class Form_Dashboard extends javax.swing.JPanel {
 
@@ -14,8 +21,19 @@ public class Form_Dashboard extends javax.swing.JPanel {
 
     private void init() {
         table.fixTable(jScrollPane1);
-        table.addRow(new Object[]{"1", "Mike Bhand", "mikebhand@gmail.com", "Admin", "25 Apr,2018"});
-        table.addRow(new Object[]{"2", "Andrew Strauss", "andrewstrauss@gmail.com", "Editor", "25 Apr,2018"});
+        UserDao userDao = new UserDao();
+        ApplicationDao appDao = new ApplicationDao();
+        LLApplicationDao llAppDao = new LLApplicationDao();
+
+        ArrayList<User> allUser = userDao.getAllUserDetails();
+        for(User user :allUser){
+        LLApplication llApplication = llAppDao.getLLApplicationDetails(appDao.getApplicationDetails(user.getId()).getApp_type_id());
+        String fullName = new FullName(user).getFullName();
+        
+        table.addRow(new Object[]{user.getId(), fullName,llApplication.getApp_no(),user.getMobileNumber(),llApplication.getApp_date().toString()});
+       
+        }
+        /*table.addRow(new Object[]{"2", "Andrew Strauss", "andrewstrauss@gmail.com", "Editor", "25 Apr,2018"});
         table.addRow(new Object[]{"3", "Ross Kopelman", "rosskopelman@gmail.com", "Subscriber", "25 Apr,2018"});
         table.addRow(new Object[]{"4", "Mike Hussy", "mikehussy@gmail.com", "Admin", "25 Apr,2018"});
         table.addRow(new Object[]{"5", "Kevin Pietersen", "kevinpietersen@gmail.com", "Admin", "25 Apr,2018"});
@@ -27,7 +45,7 @@ public class Form_Dashboard extends javax.swing.JPanel {
         table.addRow(new Object[]{"11", "Andrew Strauss", "andrewstrauss@gmail.com", "Editor", "25 Apr,2018"});
         table.addRow(new Object[]{"12", "Ross Kopelman", "rosskopelman@gmail.com", "Subscriber", "25 Apr,2018"});
         table.addRow(new Object[]{"13", "Mike Hussy", "mikehussy@gmail.com", "Admin", "25 Apr,2018"});
-        table.addRow(new Object[]{"14", "Kevin Pietersen", "kevinpietersen@gmail.com", "Admin", "25 Apr,2018"});
+        table.addRow(new Object[]{"14", "Kevin Pietersen", "kevinpietersen@gmail.com", "Admin", "25 Apr,2018"});*/
 
         //  init card data
         card1.setData(new ModelCard(GoogleMaterialDesignIcon.TODAY, SystemColor.MAIN_COLOR_1, SystemColor.MAIN_COLOR_2, "500", "Total Applications"));
