@@ -107,15 +107,19 @@ public class Recipt {
             System.out.println(c);
            if(c.startsWith("Motor Cycle with Gear")){
             selected.add("MCWG");
-          }
+           }
+           if(c.startsWith("Motor cycle without Gear")){
+            selected.add("MCWOG");
+           }
            if(c.startsWith("LIGHT MOTOR")){
             selected.add("LMV");
           }
            if(c.startsWith("LMV-")){
             selected.add("LMV-TR");
           }
-           if(c.startsWith("Transport Vehical-M/HMV")){
-            selected.add("Trans");
+           if(c.startsWith("Transport")){
+               System.out.println("hello");
+            selected.add("TRANS");
           }
           
         }

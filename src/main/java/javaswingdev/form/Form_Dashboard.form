@@ -27,14 +27,13 @@
                       <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
+                      <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
                       <Component id="card1" pref="189" max="32767" attributes="0"/>
-                      <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="83" max="-2" attributes="0"/>
                       <Component id="card2" pref="189" max="32767" attributes="0"/>
-                      <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="76" max="-2" attributes="0"/>
                       <Component id="card3" pref="189" max="32767" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="card4" pref="189" max="32767" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="73" max="-2" attributes="0"/>
                   </Group>
               </Group>
           </Group>
@@ -48,7 +47,6 @@
                   <Component id="card3" min="-2" max="-2" attributes="0"/>
                   <Component id="card2" min="-2" max="-2" attributes="0"/>
                   <Component id="card1" min="-2" max="-2" attributes="0"/>
-                  <Component id="card4" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
               <Component id="roundPanel1" max="32767" attributes="0"/>
@@ -74,19 +72,6 @@
       </Properties>
     </Component>
     <Component class="javaswingdev.card.Card" name="card3">
-      <Properties>
-        <Property name="color1" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="8c" green="f3" red="5f" type="rgb"/>
-        </Property>
-        <Property name="color2" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="1b" green="9d" red="3" type="rgb"/>
-        </Property>
-        <Property name="icon" type="javaswingdev.GoogleMaterialDesignIcon" editor="org.netbeans.modules.form.editors.EnumEditor">
-          <Value id="RING_VOLUME"/>
-        </Property>
-      </Properties>
-    </Component>
-    <Component class="javaswingdev.card.Card" name="card4">
       <Properties>
         <Property name="color1" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="8c" green="f3" red="5f" type="rgb"/>
@@ -147,7 +132,7 @@
                     <Column editable="false" title="#" type="java.lang.Object"/>
                     <Column editable="false" title="Name" type="java.lang.Object"/>
                     <Column editable="false" title="Application No." type="java.lang.Object"/>
-                    <Column editable="false" title="Class Vehical" type="java.lang.Object"/>
+                    <Column editable="false" title="Mobile No" type="java.lang.Object"/>
                     <Column editable="false" title="Application Date" type="java.lang.Object"/>
                   </Table>
                 </Property>

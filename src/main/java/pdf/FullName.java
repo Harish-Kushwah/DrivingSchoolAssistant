@@ -11,7 +11,7 @@ import model.entity.User;
 public class FullName
 {
     String firstName,middleName,lastName;
-    String fullName;
+    String fullName="";
 
     public String getFirstName() {
         return firstName;
@@ -54,14 +54,14 @@ public class FullName
     
     public FullName(User user)
     {
-        if(!user.getFirstName().equals(SystemStrings.FIRST_NAME)){
-            this.fullName += user.getFirstName();
+        if(user.getFirstName()!=null && !user.getFirstName().equals(SystemStrings.FIRST_NAME)){
+            this.fullName  += user.getFirstName()+" ";
         }
-        if(!user.getMiddleName().equals(SystemStrings.MIDDLE_NAME)){
-            this.fullName += user.getMiddleName();
+        if(user.getMiddleName()!=null && !user.getMiddleName().equals(SystemStrings.MIDDLE_NAME)){
+            this.fullName += user.getMiddleName()+ " ";
         }
-        if(!user.getFirstName().equals(SystemStrings.LAST_NAME)){
-            this.fullName += user.getLastName();
+        if(user.getLastName()!=null && !user.getFirstName().equals(SystemStrings.LAST_NAME)){
+            this.fullName += user.getLastName()+" ";
         }
     }
     public String getFullName()

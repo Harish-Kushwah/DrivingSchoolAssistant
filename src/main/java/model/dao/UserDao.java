@@ -22,7 +22,7 @@ public class UserDao {
    {
        try{
             connection = ConnectionProvider.getConnection();
-            String sql = "INSERT INTO public.user(first_name, middle_name, last_name, mobile_no, email) VALUES (?, ?, ?, ?, ?);";
+            String sql = "INSERT INTO public.user(first_name, middle_name, last_name, mobile_no, email,dob) VALUES (?, ?, ?, ?, ?,?);";
             
             PreparedStatement st = connection.prepareStatement(sql);
             st.setString(1, user.getFirstName());
@@ -30,6 +30,7 @@ public class UserDao {
             st.setString(3, user.getLastName());
             st.setString(4, user.getMobileNumber());
             st.setString(5, user.getEmail());
+            st.setDate(6,user.getDob());
             
             if(st.executeUpdate()!=0){
                 return true;
@@ -61,6 +62,8 @@ public class UserDao {
                 user.setMiddleName(set.getString("middle_name"));
                 user.setLastName(set.getString("last_name"));
                 user.setEmail(set.getString("email"));
+                user.setMobileNumber(set.getString("mobile_no"));
+                user.setDob(set.getDate("dob"));
                 return user;
             }
        }
@@ -90,6 +93,7 @@ public class UserDao {
                 user.setMiddleName(set.getString("middle_name"));
                 user.setLastName(set.getString("last_name"));
                 user.setEmail(set.getString("email"));
+                user.setMobileNumber(set.getString("mobile_no"));
                 list.add(user);
             }
        }

@@ -28,6 +28,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.ListDataListener;
 import jnafilechooser.api.JnaFileChooser;
 import model.dao.ApplicationCOVDao;
@@ -103,7 +105,7 @@ public class Form_NewApplication extends CrazyPanel {
     }
 
     public Form_NewApplication() {
-
+   
 //        this.setRound(10);
         setLayout(new MigLayout("fillx , insets 15"));
 
@@ -205,7 +207,7 @@ public class Form_NewApplication extends CrazyPanel {
         });
 
         submitButton.addActionListener((e) -> {
-           saveALLDetails();
+            saveALLDetails();
 
         });
 
@@ -244,98 +246,128 @@ public class Form_NewApplication extends CrazyPanel {
         panel.add(subTitle, "al center");
         panel.add(createJSeparator(), "span,wrap 10 ,pushx,growx");
     }
-    
-    public void saveALLDetails()
-    {
-       int userId = addUserDetails();
-       if(userId!=-1){
-          int appId = addLLApplicationDetails();
-           if(appId != -1)
-           {
-            if(addCOVDetails(appId) && addApplicationToUserDetails(appId, userId))
-            {
-               Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.TOP_RIGHT, "Application details saved successfully");
-            }
-          }      
-        }
-    }
-    
-    public int addLLApplicationDetails()
-    {
-        
-        LLApplication llapplication  = new LLApplication();
-        llapplication.setApp_no(applicationNoInput.getText());
-        llapplication.setApp_date(getSQLDate(applicationDate.getText()));
-        
+
+    //This method will save all the details into the database
+    public void saveALLDetails() {
+
+        UserDao userDao = new UserDao();
         LLApplicationDao applicationDao = new LLApplicationDao();
-        
-        applicationDao.addLLApplicationDetails(llapplication);
-        return applicationDao.getLLApplication(llapplication.getApp_no()).getId();
-        
+
+        User user = getUserDetails();
+        LLApplication llapplication = getLLApplicationDetails();
+        boolean status = getCOVSelectedDetails();
+
+        if (user != null && llapplication != null && status) {
+            if (userDao.addUserDetails(user)) {
+                int userId = userDao.getUserDetails(user.getMobileNumber()).getId();
+
+                if (applicationDao.addLLApplicationDetails(llapplication)) {
+                    int appId = applicationDao.getLLApplication(llapplication.getApp_no()).getId();
+
+                    if (addCOVDetails(appId) && addApplicationToUserDetails(appId, userId)) {
+                        Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.TOP_RIGHT, "Application details saved successfully");
+                    }
+                } else {
+                    Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_RIGHT, "Application details unable to saved");
+                }
+
+            } else {
+                Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_RIGHT, "User details unable to saved");
+            }
+        }
+
     }
-    public int addUserDetails()
-    {
+
+    public LLApplication getLLApplicationDetails() {
+
+        LLApplication llapplication = new LLApplication();
+        llapplication.setApp_no(applicationNoInput.getText());
+        if (!applicationDate.equals(SystemStrings.APPLICATION_DATE)) {
+            try {
+                java.sql.Date date = getSQLDate(applicationDate.getText());
+                llapplication.setApp_date(date);
+            } catch (Exception exp) {
+                Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_RIGHT, "Enter valid Application date");
+                return null;
+            }
+
+        }
+
+        if (llapplication.validate()) {
+            return llapplication;
+        } else {
+            Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_RIGHT, llapplication.getValidatationErrorMessage());
+        }
+        return null;
+    }
+
+    public User getUserDetails() {
         User user = new User();
         user.setFirstName(firstNameInput.getText());
         user.setMiddleName(middleNameInput.getText());
         user.setLastName(lastNameInput.getText());
         user.setEmail(emailInput.getText());
         user.setMobileNumber(mobileNoInput.getText());
+        if (!dobInput.getText().startsWith(SystemStrings.DOB)) {
+            try {
+                java.sql.Date date = getSQLDate(dobInput.getText());
+                user.setDob(date);
+            } catch (Exception exp) {
+                Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_RIGHT, "Enter valid DOB");
+                return null;
+            }
+
+        }
 
         if (user.validate()) {
-            UserDao userDao = new UserDao();
-            if (userDao.addUserDetails(user)) {
-                return userDao.getUserDetails(user.getMobileNumber()).getId();
-            }
-        }
-        else{
+            return user;
+        } else {
             Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_RIGHT, user.getVlidationErrorMessage());
-        }
-        return -1;
-    }
-   
-    public boolean addCOVDetails(int app_id)
-    {
-       List<String> selectedCOV =  covInput.getSelectedItems();
-       COVDao covdao = new COVDao();
-       ApplicationCOV appCov = new ApplicationCOV();
-       ApplicationCOVDao applicationCOVDao = new ApplicationCOVDao();
-       for(String vehical : selectedCOV){
-            appCov.setApp_id(app_id); 
-            appCov.setCov_id(covdao.getCOVId(vehical));
-            if(!applicationCOVDao.addApplicationCOVDetails(appCov)){
-                return false;
-            }
-       }
-       return true;
-    }
-    public boolean addApplicationToUserDetails(int app_id , int user_id)
-    {
-           ApplicationDao appDao = new ApplicationDao();
-           
-           Application application = new Application();
-           application.setApp_type_id(app_id);
-           application.setUser_id(user_id);
-           application.setLicence_type("LL");
-           
-           return appDao.addApplicationDetails(application);
-    }
-    
-     public java.sql.Date getSQLDate(String strDate)
-    {
-        try{
-         SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
-         java.util.Date date = sdf1.parse(strDate);
-       
-        java.sql.Date sqlDate = new java.sql.Date(date.getTime());
-        return sqlDate;
-        }
-        catch(Exception exp)
-        {
-            exp.printStackTrace();
         }
         return null;
     }
-            
+
+    public boolean getCOVSelectedDetails() {
+        List<String> selectedCOV = covInput.getSelectedItems();
+        if (selectedCOV.isEmpty()) {
+            Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_RIGHT, "Selecet At least one COV");
+            return false;
+        }
+        return true;
+    }
+
+    public boolean addCOVDetails(int app_id) {
+
+        List<String> selectedCOV = covInput.getSelectedItems();
+        COVDao covdao = new COVDao();
+        ApplicationCOV appCov = new ApplicationCOV();
+        ApplicationCOVDao applicationCOVDao = new ApplicationCOVDao();
+        for (String vehical : selectedCOV) {
+            appCov.setApp_id(app_id);
+            appCov.setCov_id(covdao.getCOVId(vehical));
+            if (!applicationCOVDao.addApplicationCOVDetails(appCov)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean addApplicationToUserDetails(int app_id, int user_id) {
+        ApplicationDao appDao = new ApplicationDao();
+
+        Application application = new Application();
+        application.setApp_type_id(app_id);
+        application.setUser_id(user_id);
+        application.setLicence_type("LL");
+        return appDao.addApplicationDetails(application);
+    }
+
+    public java.sql.Date getSQLDate(String strDate) throws Exception {
+
+        SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
+        java.util.Date date = sdf1.parse(strDate);
+        java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+        return sqlDate;
+    }
 
 }

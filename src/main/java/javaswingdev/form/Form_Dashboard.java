@@ -29,29 +29,14 @@ public class Form_Dashboard extends javax.swing.JPanel {
         for(User user :allUser){
         LLApplication llApplication = llAppDao.getLLApplicationDetails(appDao.getApplicationDetails(user.getId()).getApp_type_id());
         String fullName = new FullName(user).getFullName();
-        
-        table.addRow(new Object[]{user.getId(), fullName,llApplication.getApp_no(),user.getMobileNumber(),llApplication.getApp_date().toString()});
+        table.addRow(new Object[]{user.getId(), fullName,llApplication.getApp_no(),user.getMobileNumber(),llApplication.getApp_date()});
        
         }
-        /*table.addRow(new Object[]{"2", "Andrew Strauss", "andrewstrauss@gmail.com", "Editor", "25 Apr,2018"});
-        table.addRow(new Object[]{"3", "Ross Kopelman", "rosskopelman@gmail.com", "Subscriber", "25 Apr,2018"});
-        table.addRow(new Object[]{"4", "Mike Hussy", "mikehussy@gmail.com", "Admin", "25 Apr,2018"});
-        table.addRow(new Object[]{"5", "Kevin Pietersen", "kevinpietersen@gmail.com", "Admin", "25 Apr,2018"});
-        table.addRow(new Object[]{"6", "Andrew Strauss", "andrewstrauss@gmail.com", "Editor", "25 Apr,2018"});
-        table.addRow(new Object[]{"7", "Ross Kopelman", "rosskopelman@gmail.com", "Subscriber", "25 Apr,2018"});
-        table.addRow(new Object[]{"8", "Mike Hussy", "mikehussy@gmail.com", "Admin", "25 Apr,2018"});
-        table.addRow(new Object[]{"9", "Kevin Pietersen", "kevinpietersen@gmail.com", "Admin", "25 Apr,2018"});
-        table.addRow(new Object[]{"10", "Kevin Pietersen", "kevinpietersen@gmail.com", "Admin", "25 Apr,2018"});
-        table.addRow(new Object[]{"11", "Andrew Strauss", "andrewstrauss@gmail.com", "Editor", "25 Apr,2018"});
-        table.addRow(new Object[]{"12", "Ross Kopelman", "rosskopelman@gmail.com", "Subscriber", "25 Apr,2018"});
-        table.addRow(new Object[]{"13", "Mike Hussy", "mikehussy@gmail.com", "Admin", "25 Apr,2018"});
-        table.addRow(new Object[]{"14", "Kevin Pietersen", "kevinpietersen@gmail.com", "Admin", "25 Apr,2018"});*/
-
+      
         //  init card data
         card1.setData(new ModelCard(GoogleMaterialDesignIcon.TODAY, SystemColor.MAIN_COLOR_1, SystemColor.MAIN_COLOR_2, "500", "Total Applications"));
         card2.setData(new ModelCard(GoogleMaterialDesignIcon.RECEIPT, null, null, "Rs. 800.00", "Report Expense Monthly"));
         card3.setData(new ModelCard(null, null, null, "Rs. 300.00", "Report Profit Monthly"));
-        card4.setData(new ModelCard(null, null, null, "Rs. 300.00", "Totday Applications"));
 
     }
 
@@ -62,7 +47,6 @@ public class Form_Dashboard extends javax.swing.JPanel {
         card1 = new javaswingdev.card.Card();
         card2 = new javaswingdev.card.Card();
         card3 = new javaswingdev.card.Card();
-        card4 = new javaswingdev.card.Card();
         roundPanel1 = new javaswingdev.swing.RoundPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         table = new javaswingdev.swing.table.Table();
@@ -77,10 +61,6 @@ public class Form_Dashboard extends javax.swing.JPanel {
         card3.setColor2(new java.awt.Color(3, 157, 27));
         card3.setIcon(javaswingdev.GoogleMaterialDesignIcon.RING_VOLUME);
 
-        card4.setColor1(new java.awt.Color(95, 243, 140));
-        card4.setColor2(new java.awt.Color(3, 157, 27));
-        card4.setIcon(javaswingdev.GoogleMaterialDesignIcon.RING_VOLUME);
-
         roundPanel1.setBackground(new java.awt.Color(255, 255, 255));
         roundPanel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
         roundPanel1.setRound(10);
@@ -90,7 +70,7 @@ public class Form_Dashboard extends javax.swing.JPanel {
 
             },
             new String [] {
-                "#", "Name", "Application No.", "Class Vehical", "Application Date"
+                "#", "Name", "Application No.", "Mobile No", "Application Date"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -131,14 +111,13 @@ public class Form_Dashboard extends javax.swing.JPanel {
                         .addComponent(roundPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(30, 30, 30))
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(41, 41, 41)
                         .addComponent(card1, javax.swing.GroupLayout.DEFAULT_SIZE, 189, Short.MAX_VALUE)
-                        .addGap(30, 30, 30)
+                        .addGap(83, 83, 83)
                         .addComponent(card2, javax.swing.GroupLayout.DEFAULT_SIZE, 189, Short.MAX_VALUE)
-                        .addGap(30, 30, 30)
+                        .addGap(76, 76, 76)
                         .addComponent(card3, javax.swing.GroupLayout.DEFAULT_SIZE, 189, Short.MAX_VALUE)
-                        .addGap(18, 18, 18)
-                        .addComponent(card4, javax.swing.GroupLayout.DEFAULT_SIZE, 189, Short.MAX_VALUE)
-                        .addContainerGap())))
+                        .addGap(73, 73, 73))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -147,8 +126,7 @@ public class Form_Dashboard extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(card3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(card2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(card1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(card4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(card1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(30, 30, 30)
                 .addComponent(roundPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(30, 30, 30))
@@ -159,7 +137,6 @@ public class Form_Dashboard extends javax.swing.JPanel {
     private javaswingdev.card.Card card1;
     private javaswingdev.card.Card card2;
     private javaswingdev.card.Card card3;
-    private javaswingdev.card.Card card4;
     private javax.swing.JScrollPane jScrollPane1;
     private javaswingdev.swing.RoundPanel roundPanel1;
     private javaswingdev.swing.table.Table table;
