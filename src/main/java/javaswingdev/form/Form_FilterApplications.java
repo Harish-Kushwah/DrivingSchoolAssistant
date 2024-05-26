@@ -2,6 +2,7 @@ package javaswingdev.form;
 
 import java.awt.Color;
 import java.awt.ScrollPane;
+import java.util.ArrayList;
 import javaswingdev.swing.RoundPanel;
 import javaswingdev.swing.scroll.ScrollBar;
 import javaswingdev.swing.table.TablePanel;
@@ -9,7 +10,13 @@ import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import model.dao.ApplicationDao;
+import model.dao.LLApplicationDao;
+import model.dao.UserDao;
+import model.entity.LLApplication;
+import model.entity.User;
 import net.miginfocom.swing.MigLayout;
+import pdf.FullName;
 import raven.crazypanel.CrazyPanel;
 import util.swing.MyJTextField;
 import util.swing.MyJScrollPane;
@@ -117,26 +124,23 @@ public class Form_FilterApplications extends CrazyPanel {
         infoPanel.setBackground(Color.white);   
         pagePanel.add(infoPanel,"wrap,growx");
         
-        //----------------------------
-        String columns[] = new String [] {
-                "#", "Name", "Application No.", "Class Vehical", "Application Date","Mobile No.","Enroll No"
+        //----------------------------  
+         String columns[] = new String [] {
+                "User ID", "Name", "App No","Mob No.","App Date","App Status"
             };
         TablePanel outputPanel = new TablePanel(columns);
+//        outputTablePanel.setRowHeight(30);
         
-        outputPanel.addRow(new Object[]{"1", "Mike Bhand", "mikebhand@gmail.com", "Admin", "25 Apr,2018"});
-        outputPanel.addRow(new Object[]{"2", "Andrew Strauss", "andrewstrauss@gmail.com", "Editor", "25 Apr,2018"});
-        outputPanel.addRow(new Object[]{"3", "Ross Kopelman", "rosskopelman@gmail.com", "Subscriber", "25 Apr,2018"});
-        outputPanel.addRow(new Object[]{"4", "Mike Hussy", "mikehussy@gmail.com", "Admin", "25 Apr,2018"});
-        outputPanel.addRow(new Object[]{"5", "Kevin Pietersen", "kevinpietersen@gmail.com", "Admin", "25 Apr,2018"});
-        outputPanel.addRow(new Object[]{"6", "Andrew Strauss", "andrewstrauss@gmail.com", "Editor", "25 Apr,2018"});
-        outputPanel.addRow(new Object[]{"7", "Ross Kopelman", "rosskopelman@gmail.com", "Subscriber", "25 Apr,2018"});
-        outputPanel.addRow(new Object[]{"8", "Mike Hussy", "mikehussy@gmail.com", "Admin", "25 Apr,2018"});
-        outputPanel.addRow(new Object[]{"9", "Kevin Pietersen", "kevinpietersen@gmail.com", "Admin", "25 Apr,2018"});
-        outputPanel.addRow(new Object[]{"10", "Kevin Pietersen", "kevinpietersen@gmail.com", "Admin", "25 Apr,2018"});
-        outputPanel.addRow(new Object[]{"11", "Andrew Strauss", "andrewstrauss@gmail.com", "Editor", "25 Apr,2018"});
-        outputPanel.addRow(new Object[]{"12", "Ross Kopelman", "rosskopelman@gmail.com", "Subscriber", "25 Apr,2018"});
-        outputPanel.addRow(new Object[]{"13", "Mike Hussy", "mikehussy@gmail.com", "Admin", "25 Apr,2018"});
-        outputPanel.addRow(new Object[]{"14", "Kevin Pietersen", "kevinpietersen@gmail.com", "Admin", "25 Apr,2018"});
+        UserDao userDao = new UserDao();
+        ApplicationDao appDao = new ApplicationDao();
+        LLApplicationDao llAppDao = new LLApplicationDao();
+
+        ArrayList<User> allUser = userDao.getAllUserDetails();
+        for(User user :allUser){
+        LLApplication llApplication = llAppDao.getLLApplicationDetails(appDao.getApplicationDetails(user.getId()).getApp_type_id());
+        String fullName = new FullName(user).getFullName();
+        outputPanel.addRow(new Object[]{user.getId(), fullName,llApplication.getApp_no(),user.getMobileNumber(),llApplication.getApp_date(),llApplication.getStatus()});
+        }
 
         //--------------------------------------------------------
         pagePanel.add(new MyJScrollPane(outputPanel),"growx");

@@ -7,6 +7,9 @@ package model.entity;
 public class COV {
     int id;
     String cov_name;
+    public static int LMVTR = 3;
+    public static int A3WGV = 6;
+    public static int TRANS = 4;
 
     public int getId() {
         return id;

@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import model.entity.LLApplication;
-import model.entity.User;
 import model.helper.ConnectionProvider;
 
 /**
@@ -18,12 +17,12 @@ public class LLApplicationDao {
    {
        try{
             connection = ConnectionProvider.getConnection();
-            String sql = "INSERT INTO public.LLapplication(app_no, app_date, ll_number) VALUES (?, ?, ?);";
+            String sql = "INSERT INTO public.LLapplication(app_no, app_date, status) VALUES (?, ?, ?);";
             
             PreparedStatement st = connection.prepareStatement(sql);
             st.setString(1, application.getApp_no());
             st.setDate(2, application.getApp_date());
-            st.setString(3, application.getLl_number());    
+            st.setString(3, application.getStatus());    
             if(st.executeUpdate()!=0){
                 return true;
             }
@@ -50,7 +49,7 @@ public class LLApplicationDao {
             while(set.next()){
                 application.setId(set.getInt("id"));
                 application.setApp_date(set.getDate("app_date"));
-                application.setLl_number(set.getString("ll_number"));
+                application.setStatus(set.getString("status"));
                 application.setApp_no(set.getString("app_no"));
                 return application;
             }
@@ -77,7 +76,7 @@ public class LLApplicationDao {
             while(set.next()){
                 application.setId(set.getInt("id"));
                 application.setApp_date(set.getDate("app_date"));
-                application.setLl_number(set.getString("ll_number"));
+                application.setStatus(set.getString("status"));
                 application.setApp_no(set.getString("app_no"));
                 return application;
             }

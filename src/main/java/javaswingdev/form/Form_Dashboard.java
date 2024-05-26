@@ -29,12 +29,11 @@ public class Form_Dashboard extends javax.swing.JPanel {
         for(User user :allUser){
         LLApplication llApplication = llAppDao.getLLApplicationDetails(appDao.getApplicationDetails(user.getId()).getApp_type_id());
         String fullName = new FullName(user).getFullName();
-        table.addRow(new Object[]{user.getId(), fullName,llApplication.getApp_no(),user.getMobileNumber(),llApplication.getApp_date()});
-       
+        table.addRow(new Object[]{user.getId(), fullName,llApplication.getApp_no(),user.getMobileNumber(),llApplication.getApp_date(),llApplication.getStatus()});
         }
       
         //  init card data
-        card1.setData(new ModelCard(GoogleMaterialDesignIcon.TODAY, SystemColor.MAIN_COLOR_1, SystemColor.MAIN_COLOR_2, "500", "Total Applications"));
+        card1.setData(new ModelCard(GoogleMaterialDesignIcon.TODAY, SystemColor.MAIN_COLOR_1, SystemColor.MAIN_COLOR_2, Integer.toString(allUser.size()), "Total Applications"));
         card2.setData(new ModelCard(GoogleMaterialDesignIcon.RECEIPT, null, null, "Rs. 800.00", "Report Expense Monthly"));
         card3.setData(new ModelCard(null, null, null, "Rs. 300.00", "Report Profit Monthly"));
 
@@ -70,11 +69,11 @@ public class Form_Dashboard extends javax.swing.JPanel {
 
             },
             new String [] {
-                "#", "Name", "Application No.", "Mobile No", "Application Date"
+                "User ID", "Name", "Application No.", "Mobile No", "Application Date", "Application Status"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {

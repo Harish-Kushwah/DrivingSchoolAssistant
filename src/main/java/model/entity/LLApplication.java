@@ -12,9 +12,19 @@ import javaswingdev.system.SystemStrings;
 public class LLApplication {
 
     int id;
-    String app_no, ll_number;
-    Date app_date;
+    private String app_no, status;
+    private Date app_date;
     private String validatationErrorMessage;
+    private boolean appStatus;
+
+
+    public boolean isAppStatus() {
+        return appStatus;
+    }
+
+    public void setAppStatus(boolean appStatu) {
+        this.appStatus = appStatu;
+    }
 
     public String getValidatationErrorMessage() {
         return validatationErrorMessage;
@@ -36,12 +46,12 @@ public class LLApplication {
         this.app_no = app_no;
     }
 
-    public String getLl_number() {
-        return ll_number;
+    public String getStatus() {
+        return status;
     }
 
-    public void setLl_number(String ll_number) {
-        this.ll_number = ll_number;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public Date getApp_date() {
