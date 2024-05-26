@@ -4,6 +4,7 @@ package javaswingdev.swing.table;
 import java.awt.Dimension;
 import javaswingdev.swing.RoundPanel;
 import javax.swing.JScrollPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -23,6 +24,13 @@ public class TablePanel extends RoundPanel{
     public void addRow(Object row[])
     {
         this.table.addRow(row);
+    }
+    public void removeAllRow()
+    {
+        DefaultTableModel model = (DefaultTableModel) this.table.getModel();
+        while(model.getRowCount()>0){ 
+          this.table.removeRow();
+        }
     }
     public void setRowHeight(int height)
     {

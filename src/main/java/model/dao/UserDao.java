@@ -1,13 +1,10 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package model.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import model.entity.Application;
 import model.entity.User;
 import model.helper.ConnectionProvider;
 
@@ -74,6 +71,36 @@ public class UserDao {
        }
        return new User();    
    }
+   public User getUserDetails(int userId)
+   {
+       try{
+            connection = ConnectionProvider.getConnection();
+            String sql = "Select * from public.user where id = ?;";
+            
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setInt(1, userId);
+           
+            ResultSet set = st.executeQuery();
+            
+            User user = new User();
+            while(set.next()){
+                user.setId(set.getInt("id"));
+                user.setFirstName(set.getString("first_name"));
+                user.setMiddleName(set.getString("middle_name"));
+                user.setLastName(set.getString("last_name"));
+                user.setEmail(set.getString("email"));
+                user.setMobileNumber(set.getString("mobile_no"));
+                user.setDob(set.getDate("dob"));
+                return user;
+            }
+       }
+       
+       catch(Exception exp)
+       {
+           exp.printStackTrace();
+       }
+       return new User();    
+   }
    
    public ArrayList<User> getAllUserDetails()
    {
@@ -103,5 +130,59 @@ public class UserDao {
            exp.printStackTrace();
        }
         return list;
+   }
+   public ArrayList<User> getAllLikeNameUserDetails(String name)
+   {
+       ArrayList<User> list = new ArrayList();
+        try{
+            connection = ConnectionProvider.getConnection();
+            StringBuffer sql = new StringBuffer("Select * from public.user where upper(first_name) like ");
+            sql.append("\'");
+            sql.append("%");
+            sql.append(new StringBuffer(name.toUpperCase()));
+            sql.append("%'");
+            sql.append("or upper(middle_name) like");
+            sql.append("\'");
+            sql.append("%");
+            sql.append(new StringBuffer(name.toUpperCase()));
+            sql.append("%'");
+            sql.append("or upper(last_name) like");
+            sql.append("\'");
+            sql.append("%");
+            sql.append(new StringBuffer(name.toUpperCase()));
+            sql.append("%'");
+            sql.append(";");
+            PreparedStatement st = connection.prepareStatement(new String(sql));
+           
+            ResultSet set = st.executeQuery();
+            
+            while(set.next()){
+                 User user = new User();
+                user.setId(set.getInt("id"));
+                user.setFirstName(set.getString("first_name"));
+                user.setMiddleName(set.getString("middle_name"));
+                user.setLastName(set.getString("last_name"));
+                user.setEmail(set.getString("email"));
+                user.setMobileNumber(set.getString("mobile_no"));
+                list.add(user);
+            }
+       }
+       
+       catch(Exception exp)
+       {
+           exp.printStackTrace();
+       }
+        return list;
+   }
+   public ArrayList<User> getAllLikeApplicationUserDetails(String application)
+   {
+       ApplicationDao appDao = new ApplicationDao();
+       ArrayList<Application> allApplications = appDao.getAllLikeApplicationDetails(application);
+       ArrayList<User> list = new ArrayList();
+       for(Application app : allApplications)
+       {
+           list.add(getUserDetails(app.getUser_id()));
+       }
+       return list;
    }
 }

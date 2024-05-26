@@ -19,6 +19,7 @@ public class SystemStrings {
     public final static String ENROLMENT_NO = "Enter Enrolment No.";
     public final static String TOTAL_GIVEN = "Rs.0";
     public final static String TOTAL_DECIDED = "Rs.3500";
+    public final static String NAME_INPUT = "Enter Name";
     
     public final static String[] APPLICATION_STATUS = new String[]{"Pending", "Completed"};
     public final static String[] APPLICATION_TYPE = new String[]{"Learning Licence", "Driving Licence", "Other"};

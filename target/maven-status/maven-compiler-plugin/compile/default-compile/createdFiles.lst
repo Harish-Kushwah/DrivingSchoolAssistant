@@ -13,6 +13,7 @@ util\swing\MyJScrollPane.class
 javaswingdev\menu\MenuItem$2.class
 javaswingdev\swing\scroll\ScrollBar.class
 javaswingdev\menu\Menu$1.class
+javaswingdev\form\TemplatePage.class
 util\swing\MySubtitle.class
 javaswingdev\form\Form_DeleteApplications.class
 javaswingdev\system\SystemUI.class
@@ -79,6 +80,7 @@ javaswingdev\system\SystemColor.class
 jnafilechooser\api\WindowsFileChooser.class
 javaswingdev\swing\scroll\ModernScrollBarUI$InvisibleScrollBarButton.class
 model\entity\COV.class
+javaswingdev\form\TemplatePage$1.class
 model\dao\LLApplicationDao.class
 util\swing\ComboBoxMultiSelection$ComboBoxMultiUI.class
 jnafilechooser\api\JnaFileChooser.class

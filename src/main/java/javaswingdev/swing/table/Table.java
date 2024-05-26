@@ -44,6 +44,12 @@ public class Table extends JTable {
         DefaultTableModel model = (DefaultTableModel) getModel();
         model.addRow(row);
     }
+    public void removeRow() {
+        DefaultTableModel model = (DefaultTableModel) getModel();
+        if(model.getRowCount()>0){
+         model.removeRow(0);
+        }
+    }
 
     public void fixTable(JScrollPane scroll) {
         scroll.setBorder(null);
