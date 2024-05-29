@@ -84,6 +84,7 @@ javaswingdev\form\TemplatePage$1.class
 model\dao\LLApplicationDao.class
 util\swing\ComboBoxMultiSelection$ComboBoxMultiUI.class
 jnafilechooser\api\JnaFileChooser.class
+javaswingdev\form\TemplatePage$2.class
 javaswingdev\form\Form_FilterApplications.class
 model\entity\Transaction.class
 pdf\FullName.class
@@ -96,8 +97,10 @@ model\entity\Application.class
 javaswingdev\main\Main$1.class
 javaswingdev\swing\titlebar\TitleBar$5.class
 jnafilechooser\win32\Shell32$BrowseInfo.class
+util\MyDate.class
 javaswingdev\swing\RoundPanel.class
 javaswingdev\main\Main.class
+javaswingdev\form\TemplatePage$3.class
 model\dao\COVDao.class
 jnafilechooser\api\JnaFileChooser$Action.class
 jnafilechooser\win32\Ole32.class

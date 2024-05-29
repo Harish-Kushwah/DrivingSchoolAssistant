@@ -1,11 +1,6 @@
 package javaswingdev.main;
 
-import com.formdev.flatlaf.FlatLaf;
-import com.formdev.flatlaf.fonts.roboto.FlatRobotoFont;
-import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import java.awt.Component;
-import java.awt.Font;
-import javaswingdev.GoogleMaterialDesignIcon;
 import javaswingdev.form.Form_Dashboard;
 import javaswingdev.form.Form_Empty;
 import javaswingdev.form.Form_NewApplication;

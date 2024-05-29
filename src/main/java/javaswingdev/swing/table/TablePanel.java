@@ -31,10 +31,16 @@ public class TablePanel extends RoundPanel{
         while(model.getRowCount()>0){ 
           this.table.removeRow();
         }
+        
     }
     public void setRowHeight(int height)
     {
         this.table.setRowHeight(height);
+    }
+    
+    public Table getTable()
+    {
+        return this.table;
     }
     
     

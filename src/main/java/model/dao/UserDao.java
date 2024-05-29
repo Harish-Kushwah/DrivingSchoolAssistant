@@ -185,4 +185,26 @@ public class UserDao {
        }
        return list;
    }
+   public ArrayList<User> getAllCOVApplicationUserDetails(int app_id)
+   {
+       ApplicationDao appDao = new ApplicationDao();
+       ArrayList<Application> allApplications = appDao.getAllApplicationDetails(app_id);
+       ArrayList<User> list = new ArrayList();
+       for(Application app : allApplications)
+       {
+           list.add(getUserDetails(app.getUser_id()));
+       }
+       return list;
+   }
+   public ArrayList<User> getAllDateApplicationUserDetails(java.sql.Date date)
+   {
+       ApplicationDao appDao = new ApplicationDao();
+       ArrayList<Application> allApplications = appDao.getAllApplicationDetails(date);
+       ArrayList<User> list = new ArrayList();
+       for(Application app : allApplications)
+       {
+           list.add(getUserDetails(app.getUser_id()));
+       }
+       return list;
+   }
 }

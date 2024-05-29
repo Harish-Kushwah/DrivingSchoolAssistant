@@ -3,6 +3,7 @@ package model.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import model.entity.Application;
 import model.entity.ApplicationCOV;
 import model.helper.ConnectionProvider;
@@ -56,5 +57,28 @@ public class ApplicationCOVDao {
            exp.printStackTrace();
        }
        return -1;    
+  }
+  public ArrayList<Integer> getApplicationId(int cov_id)
+  {
+      ArrayList<Integer> list = new ArrayList();
+      try{
+          connection = ConnectionProvider.getConnection();
+          String sql = "select * from public.applicationcov where cov_id = ?";
+           PreparedStatement st = connection.prepareStatement(sql);
+            st.setInt(1, cov_id);
+           
+            ResultSet set = st.executeQuery();
+            
+         
+            
+            while(set.next()){
+                list.add(set.getInt("app_id"));
+            }
+      }
+      catch(Exception exp)
+      {
+           exp.printStackTrace();
+      }
+      return list;
   }
 }
