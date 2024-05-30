@@ -207,4 +207,8 @@ public class UserDao {
        }
        return list;
    }
+   public int getTotalUser()
+   {
+      return getAllUserDetails().size();
+   }
 }

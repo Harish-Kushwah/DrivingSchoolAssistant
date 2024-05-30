@@ -40,7 +40,7 @@ public class EnrollmentDao {
    {
        try{
             connection = ConnectionProvider.getConnection();
-            String sql = "Select * from public.user where enroll_no = ?;";
+            String sql = "Select * from public.enrollment where enroll_no = ?;";
             
             PreparedStatement st = connection.prepareStatement(sql);
             st.setString(1, enrollmentNo);
