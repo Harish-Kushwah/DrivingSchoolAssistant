@@ -100,7 +100,6 @@ jnafilechooser\win32\Shell32$BrowseInfo.class
 util\MyDate.class
 javaswingdev\swing\RoundPanel.class
 javaswingdev\main\Main.class
-javaswingdev\form\TemplatePage$3.class
 model\dao\COVDao.class
 jnafilechooser\api\JnaFileChooser$Action.class
 jnafilechooser\win32\Ole32.class

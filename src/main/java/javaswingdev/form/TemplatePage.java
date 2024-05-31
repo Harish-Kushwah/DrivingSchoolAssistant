@@ -2,14 +2,10 @@ package javaswingdev.form;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javaswingdev.swing.RoundPanel;
 import javaswingdev.swing.table.Table;
 import javaswingdev.swing.table.TablePanel;
@@ -55,7 +51,8 @@ public class TemplatePage extends CrazyPanel {
     private final MyJTextField nameInput = new MyJTextField(SystemStrings.NAME_INPUT);
     private final MyJTextField dateInput = new MyJTextField(SystemStrings.APPLICATION_DATE);
     private final MyJTextField applicationNoInput = new MyJTextField(SystemStrings.APPLICATION_NO);
-    public final TablePanel outputTablePanel;
+
+    public TablePanel outputTablePanel;
     public JPanel outputPanel;
     private final JComboBox covComboBox = new JComboBox(SystemStrings.COV);
 
@@ -121,8 +118,9 @@ public class TemplatePage extends CrazyPanel {
         buttonPanel1.setLayout(new MigLayout("fillx"));
 
         MySubmitButton submit = new MySubmitButton("Search");
+        MyResetButton clear = new MyResetButton("Clear");
         buttonPanel1.setBackground(Color.white);
-        buttonPanel1.add(new MyResetButton("Clear"), "al right");
+        buttonPanel1.add(clear, "al right");
         buttonPanel1.add(submit, "al left,wrap");
         buttonPanel1.setBackground(Color.white);
 
@@ -130,7 +128,6 @@ public class TemplatePage extends CrazyPanel {
 
         pagePanel.add(inputPanel, "wrap,growx");
 
-//        pagePanel.add(inputPanel,"wrap 10,growx");
         //-------------------------------
         JPanel infoPanel = new JPanel(new MigLayout("fillx"));
 
@@ -138,63 +135,11 @@ public class TemplatePage extends CrazyPanel {
 
         totalApplication.setText(Integer.toString(new UserDao().getTotalUser()));
         infoPanel.add(totalApplication, "al left");
-//        infoPanel.add(new JLabel("Application Details"), "al Center");
-//        infoPanel.add(new MySubmitButton("Print"), "wrap,al left");
         infoPanel.setBackground(Color.white);
         pagePanel.add(infoPanel, "wrap,growx 50");
 
         //----------------------------
-        String columns[] = new String[]{
-            "User Id", "Name", "App No", "App Date", "App Status"
-        };
-//        outputTablePanel.setRowHeight(30);
-        outputTablePanel = new TablePanel(columns);
-        UserDao userDao = new UserDao();
-        ApplicationDao appDao = new ApplicationDao();
-        LLApplicationDao llAppDao = new LLApplicationDao();
-
-        ArrayList<User> allUser = userDao.getAllUserDetails();
-        setUserDetails(allUser);
-
-        Table table = outputTablePanel.getTable();
-        DefaultTableModel model = (DefaultTableModel) table.getModel();
-        table.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                int rowIndex = table.getSelectedRow();
-                int ID = (int) model.getValueAt(rowIndex, 0);
-                String tableApplicationNo = (String) model.getValueAt(rowIndex, 2);
-                UserDao userDao = new UserDao();
-                PaymentDao paymentDao = new PaymentDao();
-
-                User user = userDao.getUserDetails(ID);
-                Payment payment = paymentDao.getPaymentDetails(user.getId());
-
-                firstNameInput.setMyText(user.getFirstName());
-                middleNameInput.setMyText(user.getMiddleName());
-                lastNameInput.setMyText(user.getLastName());
-                emailInput.setMyText(user.getEmail());
-                mobileNoInput.setMyText(user.getMobileNumber());
-                applicationNo.setMyText(tableApplicationNo);
-
-                if (user.getDob() != null) {
-                    dobInput.setMyText(user.getDob().toString());
-                }
-
-                totalGivenInput.setMyText(Integer.toString(payment.getTotalGiven()));
-                totalDecidedInput.setMyText(Integer.toString(payment.getTotalDecide()));
-                paymentStatus.setSelectedItem(payment.getPaymentStatus());
-
-                LLApplication llApplication = llAppDao.getLLApplicationDetails(appDao.getApplicationDetails(user.getId()).getApp_type_id());
-
-                applicationtStatus.setSelectedItem(llApplication.getStatus());
-                if (llApplication.getApp_date() != null) {
-                    applicationDate.setMyText(llApplication.getApp_date().toString());
-                }
-
-            }
-        });
-
+        addTableSection();
         //--------------------------------------------------------
         outputPanel = new JPanel();
 
@@ -210,6 +155,7 @@ public class TemplatePage extends CrazyPanel {
             if (e.getStateChange() == 1) {
                 System.out.println(covComboBox.getSelectedItem());
                 COVDao covdao = new COVDao();
+                UserDao userDao = new UserDao();
                 ApplicationCOVDao appCovDao = new ApplicationCOVDao();
                 int covId = covdao.getCOVId((String) covComboBox.getSelectedItem());
                 ArrayList<Integer> allAppId = appCovDao.getApplicationId(covId);
@@ -222,33 +168,27 @@ public class TemplatePage extends CrazyPanel {
             }
         });
 
-        submit.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                UserDao userDao = new UserDao();
-                if (!dateInput.getText().equals(SystemStrings.APPLICATION_DATE)) {
-                    try {
-                        outputTablePanel.removeAllRow();
+        submit.addActionListener((ActionEvent e) -> {
+            UserDao userDao1 = new UserDao();
+            if (!dateInput.getText().equals(SystemStrings.APPLICATION_DATE)) {
+                try {
+                    outputTablePanel.removeAllRow();
+                    java.sql.Date date = MyDate.getSQLDate(dateInput.getText());
+                    setUserDetails(userDao1.getAllDateApplicationUserDetails(date));
+                } catch (Exception ex) {
 
-                        java.sql.Date date = MyDate.getSQLDate(dateInput.getText());
-                        setUserDetails(userDao.getAllDateApplicationUserDetails(date));
-                        System.out.println("Hello");
-                    } catch (Exception ex) {
-
-                        Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_RIGHT, "Enter Valid Date");
-
-                    }
+                    Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_RIGHT, "Enter Valid Date");
 
                 }
             }
         });
 
+        clear.addActionListener((ActionEvent e) -> {
+            resetSearchInputSection();
+        });
+
         addInfoOutputPanel();
 
-    }
-
-    public void addInfoOutputPanel(JPanel infoOutputPanel) {
-        outputPanel.add(infoOutputPanel, "growx , wrap , top,pushy");
     }
 
     public JLabel getInfoLabel(String label) {
@@ -299,6 +239,11 @@ public class TemplatePage extends CrazyPanel {
 
     }
 
+    public void resetTable()
+    {
+        outputTablePanel.removeAllRow();
+        setUserDetails(new UserDao().getAllUserDetails());
+    }
     public void setUserDetails(ArrayList<User> allUser) {
         ApplicationDao appDao = new ApplicationDao();
         LLApplicationDao llAppDao = new LLApplicationDao();
@@ -355,4 +300,122 @@ public class TemplatePage extends CrazyPanel {
         infoOutputPanel.add(applicationtStatus, "wrap,growx");
     }
 
+    private User selectedUser = null;
+
+    public User getSelectedUser() {
+        return this.selectedUser;
+    }
+
+    public void addTableSection() {
+        String columns[] = new String[]{
+            "User Id", "Name", "App No", "App Date", "App Status"
+        };
+        outputTablePanel = new TablePanel(columns);
+        UserDao userDao = new UserDao();
+        ApplicationDao appDao = new ApplicationDao();
+        LLApplicationDao llAppDao = new LLApplicationDao();
+
+        ArrayList<User> allUser = userDao.getAllUserDetails();
+        setUserDetails(allUser);
+        Table table = outputTablePanel.getTable();
+        DefaultTableModel model = (DefaultTableModel) table.getModel();
+        table.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+
+                int rowIndex = table.getSelectedRow();
+                int ID = (int) model.getValueAt(rowIndex, 0);
+                String tableApplicationNo = (String) model.getValueAt(rowIndex, 2);
+                UserDao userDao = new UserDao();
+                PaymentDao paymentDao = new PaymentDao();
+
+                User user = userDao.getUserDetails(ID);
+                selectedUser = user;
+
+                Payment payment = paymentDao.getPaymentDetails(user.getId());
+
+                resetPage();
+
+                setUserDetailsOnInputes(user);
+
+                applicationNo.setMyText(tableApplicationNo);
+
+                if (user.getDob() != null) {
+                    dobInput.setMyText(user.getDob().toString());
+                }
+
+                totalGivenInput.setMyText(Integer.toString(payment.getTotalGiven()));
+                totalDecidedInput.setMyText(Integer.toString(payment.getTotalDecide()));
+                paymentStatus.setSelectedItem(payment.getPaymentStatus());
+
+                LLApplication llApplication = llAppDao.getLLApplicationDetails(appDao.getApplicationDetails(user.getId()).getApp_type_id());
+
+                applicationtStatus.setSelectedItem(llApplication.getStatus());
+                if (llApplication.getApp_date() != null) {
+                    applicationDate.setMyText(llApplication.getApp_date().toString());
+                }
+
+            }
+        });
+    }
+
+    public void setUserDetailsOnInputes(User user) {
+        if (user != null) {
+            if (user.getFirstName() != null) {
+                firstNameInput.setMyText(user.getFirstName());
+            }
+            if (user.getMiddleName() != null) {
+                middleNameInput.setMyText(user.getMiddleName());
+            }
+
+            if (user.getLastName() != null) {
+                lastNameInput.setMyText(user.getLastName());
+            }
+            if (user.getEmail() != null) {
+                emailInput.setMyText(user.getEmail());
+            }
+            if (user.getMobileNumber() != null) {
+                mobileNoInput.setMyText(user.getMobileNumber());
+            }
+        }
+
+    }
+
+    public void resetPage() {
+        firstNameInput.setPlaceholder(SystemStrings.FIRST_NAME);
+        middleNameInput.setPlaceholder(SystemStrings.MIDDLE_NAME);
+        lastNameInput.setPlaceholder(SystemStrings.LAST_NAME);
+        dobInput.setPlaceholder(SystemStrings.DOB);
+        applicationNoInput.setPlaceholder(SystemStrings.APPLICATION_NO);
+        applicationDate.setPlaceholder(SystemStrings.APPLICATION_DATE);
+        totalGivenInput.setPlaceholder(SystemStrings.TOTAL_GIVEN);
+        totalDecidedInput.setPlaceholder(SystemStrings.TOTAL_DECIDED);
+        mobileNoInput.setPlaceholder(SystemStrings.MOBILE_NO);
+        emailInput.setPlaceholder(SystemStrings.EMAIL);
+        applicationNo.setPlaceholder(SystemStrings.APPLICATION_NO);
+    }
+
+    public void resetSearchInputSection() {
+        nameInput.setPlaceholder(SystemStrings.NAME_INPUT);
+        dateInput.setPlaceholder(SystemStrings.APPLICATION_DATE);
+        applicationNoInput.setPlaceholder(SystemStrings.APPLICATION_NO);
+        covComboBox.setSelectedIndex(0);
+        Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.TOP_RIGHT, "Searching Inputes Cleared Successfully");
+
+    }
+
+    public void setInputesEditable(boolean isEditable) {
+        firstNameInput.setEditable(isEditable);
+        middleNameInput.setEditable(isEditable);
+        lastNameInput.setEditable(isEditable);
+        dobInput.setEditable(isEditable);
+        applicationNo.setEditable(isEditable);
+        applicationDate.setEditable(isEditable);
+        totalGivenInput.setEditable(isEditable);
+        totalDecidedInput.setEditable(isEditable);
+        mobileNoInput.setEditable(isEditable);
+        emailInput.setEditable(isEditable);
+        applicationtStatus.setEditable(isEditable);
+
+    }
 }

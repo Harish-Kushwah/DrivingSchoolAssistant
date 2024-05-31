@@ -1,14 +1,8 @@
 package javaswingdev.form;
 
 import java.awt.Color;
-import javaswingdev.swing.RoundPanel;
-import javaswingdev.system.SystemColor;
-import javaswingdev.system.SystemFonts;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import net.miginfocom.swing.MigLayout;
-import util.swing.MyJTextField;
-import util.swing.MyTitle;
 import util.swing.button.MyDeleteButton;
 import util.swing.button.MyResetButton;
 
@@ -32,15 +26,8 @@ public class Form_DeleteApplications extends TemplatePage {
 
         infoOutputPanel.add(buttonPanel1, "span,growx");
         outputPanel.add(infoOutputPanel, "growx , wrap , top,pushy");
+        
+         setInputesEditable(false);
 
     }
-
-    public JLabel getInfoLabel(String label) {
-        JLabel info = new JLabel(label);
-        info.setForeground(SystemColor.PRIMARY);
-        info.setFont(SystemFonts.INFO_FONT);
-
-        return info;
-    }
-
 }

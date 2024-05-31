@@ -40,6 +40,32 @@ public class UserDao {
        }
        return false;     
    }
+   public boolean updateUserDetails(User user)
+   {
+       try{
+            connection = ConnectionProvider.getConnection();
+            String sql = "UPDATE public.user set first_name =? , middle_name = ? , last_name = ?, mobile_no = ? , email = ? ,dob = ? where id = ?";
+            
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, user.getFirstName());
+            st.setString(2, user.getMiddleName());
+            st.setString(3, user.getLastName());
+            st.setString(4, user.getMobileNumber());
+            st.setString(5, user.getEmail());
+            st.setDate(6,user.getDob());
+            st.setInt(7, user.getId());
+            
+            if(st.executeUpdate()!=0){
+                return true;
+            }
+       
+       }
+       catch(Exception exp)
+       {
+           exp.printStackTrace();
+       }
+       return false;     
+   }
    
    public User getUserDetails(String mobile_no)
    {
@@ -107,7 +133,7 @@ public class UserDao {
        ArrayList<User> list = new ArrayList();
         try{
             connection = ConnectionProvider.getConnection();
-            String sql = "Select * from public.user";
+            String sql = "Select * from public.user order by id asc";
             
             PreparedStatement st = connection.prepareStatement(sql);
            

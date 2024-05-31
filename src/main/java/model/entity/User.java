@@ -154,6 +154,24 @@ public class User {
        
         return true;
     }
+    public void clean()
+    {
+        if(this.firstName == null){
+            this.firstName = SystemStrings.FIRST_NAME;
+        }
+        if(this.middleName == null){
+            this.middleName = SystemStrings.MIDDLE_NAME;
+        }
+        if(this.lastName == null){
+            this.lastName = SystemStrings.LAST_NAME;
+        }
+        if(this.email == null){
+            this.email = SystemStrings.EMAIL;
+        }
+        if(this.mobileNumber == null){
+            this.mobileNumber = SystemStrings.MOBILE_NO;
+        }
+    }
 
     public String getVlidationErrorMessage() {
         return this.validatationErrorMessage;
