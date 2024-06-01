@@ -26,6 +26,7 @@ javaswingdev\form\Form_PaymentHistory.class
 model\entity\LLApplication.class
 javaswingdev\swing\titlebar\TitleBar$3.class
 model\dao\PaymentDao.class
+model\helper\RandomData.class
 util\swing\MyJSeparator.class
 javaswingdev\swing\table\Table.class
 util\swing\button\MyButton.class

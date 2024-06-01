@@ -36,6 +36,28 @@ public class PaymentDao {
        }
        return false;     
    }
+   public boolean updatePaymentDetails(Payment payment)
+   {
+       try{
+            connection = ConnectionProvider.getConnection();
+            String sql = "UPDATE  public.payment set total_given = ? , total_decided = ? , status = ? where user_id = ?;";
+            
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setInt(1, payment.getTotalGiven());
+            st.setInt(2, payment.getTotalDecide());  
+            st.setString(3, payment.getPaymentStatus());
+            st.setInt(4, payment.getUserId());
+            if(st.executeUpdate()!=0){
+                return true;
+            }
+       
+       }
+       catch(Exception exp)
+       {
+           exp.printStackTrace();
+       }
+       return false;     
+   }
    
    public Payment getPaymentDetails(int userId)
    {

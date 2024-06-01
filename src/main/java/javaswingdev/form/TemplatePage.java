@@ -305,6 +305,10 @@ public class TemplatePage extends CrazyPanel {
     public User getSelectedUser() {
         return this.selectedUser;
     }
+    public void clearUser()
+    {
+        this.selectedUser = null;
+    }
 
     public void addTableSection() {
         String columns[] = new String[]{
@@ -393,6 +397,8 @@ public class TemplatePage extends CrazyPanel {
         mobileNoInput.setPlaceholder(SystemStrings.MOBILE_NO);
         emailInput.setPlaceholder(SystemStrings.EMAIL);
         applicationNo.setPlaceholder(SystemStrings.APPLICATION_NO);
+        
+//        this.selectedUser = null;
     }
 
     public void resetSearchInputSection() {
@@ -401,7 +407,7 @@ public class TemplatePage extends CrazyPanel {
         applicationNoInput.setPlaceholder(SystemStrings.APPLICATION_NO);
         covComboBox.setSelectedIndex(0);
         Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.TOP_RIGHT, "Searching Inputes Cleared Successfully");
-
+       
     }
 
     public void setInputesEditable(boolean isEditable) {

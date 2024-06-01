@@ -13,6 +13,7 @@ import model.helper.ConnectionProvider;
 public class LLApplicationDao {
    private Connection connection = null;
    
+   
    public boolean addLLApplicationDetails(LLApplication application)
    {
        try{
@@ -33,7 +34,45 @@ public class LLApplicationDao {
        }
        return false;     
    }
-   
+   public boolean removeLLApplicationDetails(int id)
+   {
+       try{
+            connection = ConnectionProvider.getConnection();
+            String sql = "DELETE from public.LLapplication where id = ?;";
+            
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setInt(1, id); 
+            if(st.executeUpdate()!=0){
+                return true;
+            }
+       }
+       catch(Exception exp)
+       {
+           exp.printStackTrace();
+       }
+       return false;     
+   }
+   public boolean updateLLApplicationDetails(LLApplication application)
+   {
+       try{
+            connection = ConnectionProvider.getConnection();
+            String sql = "UPDATE  public.LLapplication set app_no = ? , status = ?  where id  = ? ";
+            
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, application.getApp_no());
+            st.setString(2, application.getStatus());    
+            st.setInt(3, application.getId());
+
+            if(st.executeUpdate()!=0){
+                return true;
+            }
+       }
+       catch(Exception exp)
+       {
+           exp.printStackTrace();
+       }
+       return false;     
+   }
    public LLApplication getLLApplicationDetails(int id)
    {
        try{

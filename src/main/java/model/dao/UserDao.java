@@ -66,6 +66,26 @@ public class UserDao {
        }
        return false;     
    }
+   public boolean removeUserDetails(int user_id)
+   {
+        try{
+            connection = ConnectionProvider.getConnection();
+            String sql = "Delete from public.user where id = ?";
+            
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setInt(1, user_id);
+            
+            if(st.executeUpdate()!=0){
+                return true;
+            }
+       
+       }
+       catch(Exception exp)
+       {
+           exp.printStackTrace();
+       }
+       return false;   
+   }
    
    public User getUserDetails(String mobile_no)
    {

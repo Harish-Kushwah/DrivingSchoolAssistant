@@ -35,6 +35,7 @@ import model.entity.Payment;
 import net.miginfocom.swing.MigLayout;
 import model.entity.Recipt;
 import model.entity.User;
+import model.helper.RandomData;
 import pdf.FullName;
 import pdf.ExtractReciptDetails;
 import util.swing.ComboBoxMultiSelection;
@@ -69,7 +70,7 @@ public class Form_NewApplication extends CrazyPanel {
     JComboBox applicationtType = new JComboBox(SystemStrings.APPLICATION_TYPE);
 
     DefaultComboBoxModel comboBoxModel = new DefaultComboBoxModel<>(SystemStrings.COV);
-    
+
     MyJTextField totalGivenInput = new MyJTextField(SystemStrings.TOTAL_GIVEN);
     MyJTextField totalDecidedInput = new MyJTextField(SystemStrings.TOTAL_DECIDED);
 
@@ -92,6 +93,25 @@ public class Form_NewApplication extends CrazyPanel {
         applicationDate.setMyText(application.getDate());
         covInput.setSelectedItems(application.getSelectedCOV());
         applicationtType.setSelectedIndex(application.getApplicationTypeIndex());
+        totalGivenInput.setText(SystemStrings.TOTAL_GIVEN);
+    }
+
+    public void setRandomApplicationDetails() {
+
+        RandomData data = new RandomData();
+        User user = data.getUser();
+        firstNameInput.setMyText(user.getFirstName());
+        middleNameInput.setMyText(user.getMiddleName());
+        lastNameInput.setMyText(user.getLastName());
+        mobileNoInput.setMyText(user.getMobileNumber());
+        emailInput.setMyText(user.getEmail());
+        dobInput.setMyText(user.getDob().toString());
+
+        LLApplication application = data.getLLApplication();
+        applicationNoInput.setMyText(application.getApp_no());
+        applicationDate.setMyText(application.getApp_date().toString());
+        
+        
     }
 
     public void resetPage() {
@@ -106,7 +126,7 @@ public class Form_NewApplication extends CrazyPanel {
         totalGivenInput.setPlaceholder(SystemStrings.TOTAL_DECIDED);
         mobileNoInput.setPlaceholder(SystemStrings.MOBILE_NO);
         emailInput.setPlaceholder(SystemStrings.EMAIL);
-        
+
         setDefaultPageDetails();
 
     }
@@ -175,9 +195,12 @@ public class Form_NewApplication extends CrazyPanel {
 
         MySubmitButton submitButton = new MySubmitButton("Submit");
         MySubmitButton reciptUploadButton = new MySubmitButton("Upload");
+        MySubmitButton reandomDetailsBtn = new MySubmitButton("Generate");
         MyResetButton clearButton = new MyResetButton("Clear");
 
-        panel.add(reciptUploadButton, "al left");
+        panel.add(reciptUploadButton, "al left, split 2");
+        panel.add(reandomDetailsBtn, "al right");
+
         panel.add(clearButton, "split 2, al center");
         panel.add(submitButton, "wrap");
         panel.add(new JLabel(""), "wrap 50");
@@ -185,7 +208,7 @@ public class Form_NewApplication extends CrazyPanel {
         add(new MyJScrollPane(panel), "growx");
 
         setDefaultPageDetails();
-        
+
         //=====================
         reciptUploadButton.addActionListener((e) -> {
 
@@ -220,6 +243,10 @@ public class Form_NewApplication extends CrazyPanel {
         submitButton.addActionListener((e) -> {
             saveALLDetails();
 
+        });
+
+        reandomDetailsBtn.addActionListener((e) -> {
+            setRandomApplicationDetails();
         });
 
     }
@@ -264,23 +291,23 @@ public class Form_NewApplication extends CrazyPanel {
         UserDao userDao = new UserDao();
         LLApplicationDao applicationDao = new LLApplicationDao();
         PaymentDao paymentDao = new PaymentDao();
-        
+
         User user = getUserDetails();
         LLApplication llapplication = getLLApplicationDetails();
         boolean status = getCOVSelectedDetails();
         String enrollmentNumbers[] = getEnrollmentDetails();
         Payment payment = getPaymentDetails();
 
-        if (user != null && llapplication != null && status && enrollmentNumbers != null && payment!=null) {
+        if (user != null && llapplication != null && status && enrollmentNumbers != null && payment != null) {
             System.out.println(payment);
             if (userDao.addUserDetails(user)) {
                 int userId = userDao.getUserDetails(user.getMobileNumber()).getId();
-              
+
                 payment.setUserId(userId);
                 if (applicationDao.addLLApplicationDetails(llapplication)) {
                     int appId = applicationDao.getLLApplication(llapplication.getApp_no()).getId();
 
-                    if (addCOVDetails(appId, enrollmentNumbers) && addApplicationToUserDetails(appId, userId)&& paymentDao.addPaymentDetails(payment)) {                     
+                    if (addCOVDetails(appId, enrollmentNumbers) && addApplicationToUserDetails(appId, userId) && paymentDao.addPaymentDetails(payment)) {
                         Notifications.getInstance().show(Notifications.Type.SUCCESS, Notifications.Location.TOP_RIGHT, "Application details saved successfully");
                     }
                 } else {
@@ -293,37 +320,35 @@ public class Form_NewApplication extends CrazyPanel {
         }
 
     }
-    
-    public Payment getPaymentDetails(){
+
+    public Payment getPaymentDetails() {
         Pattern validPaymentPattern = Pattern.compile("^[0-9]{1,29}");
         Payment payment = new Payment();
-        if(!totalDecidedInput.getText().equals(SystemStrings.TOTAL_DECIDED)){
-             Matcher matcher = validPaymentPattern.matcher(totalDecidedInput.getText());
-             if (matcher.matches() == false) {
-               Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_RIGHT, "Enter Valid total decided payment");
-               return null;
-            }
-            else{
+        if (!totalDecidedInput.getText().equals(SystemStrings.TOTAL_DECIDED)) {
+            Matcher matcher = validPaymentPattern.matcher(totalDecidedInput.getText());
+            if (matcher.matches() == false) {
+                Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_RIGHT, "Enter Valid total decided payment");
+                return null;
+            } else {
                 payment.setTotalDecide(Integer.parseInt(totalDecidedInput.getText()));
             }
         }
-        
-        if(!totalGivenInput.getText().equals(SystemStrings.TOTAL_GIVEN)){
-             Matcher matcher = validPaymentPattern.matcher(totalGivenInput.getText());
-             if (matcher.matches() == false) {
-               Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_RIGHT, "Enter Valid total Given payment");
-               return null;
+
+        if (!totalGivenInput.getText().equals(SystemStrings.TOTAL_GIVEN)) {
+            Matcher matcher = validPaymentPattern.matcher(totalGivenInput.getText());
+            if (matcher.matches() == false) {
+                Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_RIGHT, "Enter Valid total Given payment");
+                return null;
+            } else {
+                payment.setTotalGiven(Integer.parseInt(totalGivenInput.getText()));
             }
-            else{
-              payment.setTotalGiven(Integer.parseInt(totalGivenInput.getText()));
-            }
-             
+
         }
-        
-        payment.setPaymentStatus((String)paymentStatus.getSelectedItem());
+
+        payment.setPaymentStatus((String) paymentStatus.getSelectedItem());
         return payment;
     }
-  
+
     public LLApplication getLLApplicationDetails() {
 
         LLApplication llapplication = new LLApplication();
@@ -466,14 +491,12 @@ public class Form_NewApplication extends CrazyPanel {
         java.sql.Date sqlDate = new java.sql.Date(date.getTime());
         return sqlDate;
     }
-    
-    public void setDefaultPageDetails()
-    {
+
+    public void setDefaultPageDetails() {
         applicationDate.setMyText(getTodayDate());
     }
-    
-    public String getTodayDate()
-    {
+
+    public String getTodayDate() {
         SimpleDateFormat ft = new SimpleDateFormat("dd-MM-yyyy");
         return ft.format(new java.util.Date());
     }
