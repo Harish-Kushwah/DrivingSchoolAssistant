@@ -1,6 +1,8 @@
 
 package javaswingdev.system;
 
+import javax.swing.JCheckBox;
+
 
 /**
  *
@@ -26,6 +28,4 @@ public class SystemStrings {
     public final static String[] PAYMENT_STATUS = new String[]{"Pending", "Completed"};
     public final static String[] COV = new String[]{"MCWOG","MCWG", "LMV", "LMV-TR", "TRANS", "3WGV"};
     
-    
-
 }

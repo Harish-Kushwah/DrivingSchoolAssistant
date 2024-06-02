@@ -11,6 +11,10 @@ public class COV {
     public static int A3WGV = 6;
     public static int TRANS = 4;
 
+    public COV(int id)
+    {
+        this.id = id;
+    }
     public int getId() {
         return id;
     }
