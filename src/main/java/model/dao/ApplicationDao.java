@@ -5,10 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import model.entity.Application;
-import model.entity.LLApplication;
-import model.entity.User;
 import model.helper.ConnectionProvider;
-import util.MyDate;
 
 /**
  *
@@ -87,6 +84,25 @@ public class ApplicationDao {
         return list;
     }
     public ArrayList<Application> getAllApplicationDetails(java.sql.Date date) {
+        ArrayList<Application> list = new ArrayList();
+        try {
+            connection = ConnectionProvider.getConnection();
+            String sql ="SELECT user_id FROM public.application FULL OUTER JOIN public.llapplication ON public.application.app_type_id=public.llapplication.id where public.llapplication.app_date = ? ";
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setDate(1, date);
+            ResultSet set = st.executeQuery();
+
+            while (set.next()) {
+                Application application = new Application();
+                application.setUser_id(set.getInt(1));
+                list.add(application);
+            }
+        } catch (Exception exp) {
+            exp.printStackTrace();
+        }
+        return list;
+    }
+    public ArrayList<Application> getAllApplicationDetailsUpTo(java.sql.Date date) {
         ArrayList<Application> list = new ArrayList();
         try {
             connection = ConnectionProvider.getConnection();

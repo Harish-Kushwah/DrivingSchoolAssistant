@@ -253,6 +253,17 @@ public class UserDao {
        }
        return list;
    }
+   public ArrayList<User> getAllDateApplicationUserDetailsUpTo(java.sql.Date date)
+   {
+       ApplicationDao appDao = new ApplicationDao();
+       ArrayList<Application> allApplications = appDao.getAllApplicationDetailsUpTo(date);
+       ArrayList<User> list = new ArrayList();
+       for(Application app : allApplications)
+       {
+           list.add(getUserDetails(app.getUser_id()));
+       }
+       return list;
+   }
    public int getTotalUser()
    {
       return getAllUserDetails().size();

@@ -11,6 +11,7 @@ import model.dao.UserDao;
 import model.entity.LLApplication;
 import model.entity.User;
 import pdf.FullName;
+import util.MyDate;
 
 public class Form_Dashboard extends javax.swing.JPanel {
 
@@ -26,16 +27,28 @@ public class Form_Dashboard extends javax.swing.JPanel {
         LLApplicationDao llAppDao = new LLApplicationDao();
 
         ArrayList<User> allUser = userDao.getAllUserDetails();
-        for(User user :allUser){
-        LLApplication llApplication = llAppDao.getLLApplicationDetails(appDao.getApplicationDetails(user.getId()).getApp_type_id());
-        String fullName = new FullName(user).getFullName();
-        table.addRow(new Object[]{user.getId(), fullName,llApplication.getApp_no(),user.getMobileNumber(),llApplication.getApp_date(),llApplication.getStatus()});
+        for (User user : allUser) {
+            LLApplication llApplication = llAppDao.getLLApplicationDetails(appDao.getApplicationDetails(user.getId()).getApp_type_id());
+            String fullName = new FullName(user).getFullName();
+            table.addRow(new Object[]{user.getId(), fullName, llApplication.getApp_no(), user.getMobileNumber(), llApplication.getApp_date(), llApplication.getStatus()});
         }
-      
+        try {
+            ArrayList<User> todaysAllUser = userDao.getAllDateApplicationUserDetails(MyDate.getSQLDate(MyDate.getTodayDate()));
+            card3.setData(new ModelCard(GoogleMaterialDesignIcon.RECEIPT, null, null, Integer.toString(todaysAllUser.size()), "Today's Total Applications"));
+
+        } catch (Exception exp) {
+        }
+        
+        try {
+            ArrayList<User> mothlyAllUser = userDao.getAllDateApplicationUserDetailsUpTo(MyDate.getSQLDate(MyDate.getTodayDate()));
+
+           card2.setData(new ModelCard(null, null, null, Integer.toString(mothlyAllUser.size()), "Monthly Total Applications"));
+
+        } catch (Exception exp) {
+        }
+
         //  init card data
         card1.setData(new ModelCard(GoogleMaterialDesignIcon.TODAY, SystemColor.MAIN_COLOR_1, SystemColor.MAIN_COLOR_2, Integer.toString(allUser.size()), "Total Applications"));
-        card2.setData(new ModelCard(GoogleMaterialDesignIcon.RECEIPT, null, null, "Rs. 800.00", "Report Expense Monthly"));
-        card3.setData(new ModelCard(null, null, null, "Rs. 300.00", "Report Profit Monthly"));
 
     }
 
