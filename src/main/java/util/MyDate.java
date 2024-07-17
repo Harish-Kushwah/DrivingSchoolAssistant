@@ -19,4 +19,10 @@ public class MyDate {
         SimpleDateFormat ft = new SimpleDateFormat("dd-MM-yyyy");
         return ft.format(new java.util.Date());
     }
+    public static String getFormatedDate(java.util.Date date)
+    {
+        SimpleDateFormat ft = new SimpleDateFormat("dd-MM-yyyy");
+        return ft.format(date);
+    }
+   
 }

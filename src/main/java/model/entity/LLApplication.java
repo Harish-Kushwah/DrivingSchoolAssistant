@@ -17,6 +17,11 @@ public class LLApplication {
     private String validatationErrorMessage;
     private boolean appStatus;
 
+    @Override
+    public String toString() {
+        return "LLApplication{" + "id=" + id + ", app_no=" + app_no + ", status=" + status + ", app_date=" + app_date + ", validatationErrorMessage=" + validatationErrorMessage + ", appStatus=" + appStatus + '}';
+    }
+
 
     public boolean isAppStatus() {
         return appStatus;

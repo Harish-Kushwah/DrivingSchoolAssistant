@@ -7,6 +7,7 @@ import java.awt.Font;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javaswingdev.main.Main;
@@ -41,6 +42,7 @@ import pdf.ExtractReciptDetails;
 import util.swing.ComboBoxMultiSelection;
 import raven.crazypanel.CrazyPanel;
 import raven.toast.Notifications;
+import util.MyDate;
 import util.swing.MyJScrollPane;
 import util.swing.MyJTextField;
 import util.swing.MyTitlePanel;
@@ -105,12 +107,15 @@ public class Form_NewApplication extends CrazyPanel {
         lastNameInput.setMyText(user.getLastName());
         mobileNoInput.setMyText(user.getMobileNumber());
         emailInput.setMyText(user.getEmail());
-        dobInput.setMyText(user.getDob().toString());
+        dobInput.setMyText(MyDate.getFormatedDate(user.getDob()));
 
         LLApplication application = data.getLLApplication();
         applicationNoInput.setMyText(application.getApp_no());
-        applicationDate.setMyText(application.getApp_date().toString());
-        
+        applicationDate.setMyText(MyDate.getFormatedDate(application.getApp_date()));
+        for(int i =0 ; i<2;i++){
+            Random rand = new Random();
+            covInput.setSelectedIndex(rand.nextInt(5));
+        }
         
     }
 
@@ -356,8 +361,10 @@ public class Form_NewApplication extends CrazyPanel {
         llapplication.setStatus((String) applicationtStatus.getSelectedItem());
         if (!applicationDate.equals(SystemStrings.APPLICATION_DATE)) {
             try {
-                java.sql.Date date = getSQLDate(applicationDate.getText());
+                java.sql.Date date = MyDate.getSQLDate(applicationDate.getText());
+                
                 llapplication.setApp_date(date);
+              
             } catch (Exception exp) {
                 Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_RIGHT, "Enter valid Application date");
                 return null;

@@ -41,6 +41,7 @@ model\dao\EnrollmentDao.class
 util\swing\MyTitle.class
 javaswingdev\menu\EventMenuSelected.class
 javaswingdev\system\SystemStrings.class
+javaswingdev\form\Form_FilterApplications$1.class
 util\swing\ComboBoxMultiSelection$ComboBoxMultiUI$MultiComboPopup.class
 model\entity\Enrollment.class
 javaswingdev\menu\Menu.class

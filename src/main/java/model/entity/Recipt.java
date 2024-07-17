@@ -118,7 +118,6 @@ public class Recipt {
             selected.add("LMV-TR");
           }
            if(c.startsWith("Transport")){
-               System.out.println("hello");
             selected.add("TRANS");
           }
           

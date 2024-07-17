@@ -28,6 +28,7 @@ public class RandomData {
         application.setApp_date(getRandomDate("-"));
         application.setApp_no(getRandomNumber(10));
         application.setAppStatus(getRandomStatus());
+        
         return application;
         
     }
@@ -55,7 +56,7 @@ public class RandomData {
         Random rand = new Random();
         String name = "";
         for (int i = 0; i < len; i++) {
-            char ch = (char) rand.nextInt(96, 123);
+            char ch = (char) rand.nextInt(97, 123);
             if (i == 0) {
                 name += Character.toUpperCase(ch);
             } else {
@@ -95,8 +96,8 @@ public class RandomData {
 
     }
 
-    public static void main(String[] args) {
-        User user = new RandomData().getUser();
-        System.out.println(user);
-    }
+//    public static void main(String[] args) {
+//        User user = new RandomData().getUser();
+//        System.out.println(user);
+//    }
 }

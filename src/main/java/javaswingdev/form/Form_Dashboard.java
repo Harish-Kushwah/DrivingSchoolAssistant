@@ -33,14 +33,14 @@ public class Form_Dashboard extends javax.swing.JPanel {
             table.addRow(new Object[]{user.getId(), fullName, llApplication.getApp_no(), user.getMobileNumber(), llApplication.getApp_date(), llApplication.getStatus()});
         }
         try {
-            ArrayList<User> todaysAllUser = userDao.getAllDateApplicationUserDetails(MyDate.getSQLDate(MyDate.getTodayDate()));
+            ArrayList<User> todaysAllUser = userDao.getTodayAllUserDetails();
             card3.setData(new ModelCard(GoogleMaterialDesignIcon.RECEIPT, null, null, Integer.toString(todaysAllUser.size()), "Today's Total Applications"));
 
         } catch (Exception exp) {
         }
         
         try {
-            ArrayList<User> mothlyAllUser = userDao.getAllDateApplicationUserDetailsUpTo(MyDate.getSQLDate(MyDate.getTodayDate()));
+            ArrayList<User> mothlyAllUser = userDao.getMonthlyAllUserDetails();
 
            card2.setData(new ModelCard(null, null, null, Integer.toString(mothlyAllUser.size()), "Monthly Total Applications"));
 

@@ -1,6 +1,7 @@
 package javaswingdev.form;
 
 import java.awt.Color;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import javaswingdev.swing.RoundPanel;
 import javaswingdev.swing.table.TablePanel;
@@ -8,6 +9,8 @@ import javaswingdev.system.SystemStrings;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import model.dao.ApplicationCOVDao;
 import model.dao.ApplicationDao;
 import model.dao.COVDao;
@@ -18,6 +21,8 @@ import model.entity.User;
 import net.miginfocom.swing.MigLayout;
 import pdf.FullName;
 import raven.crazypanel.CrazyPanel;
+import raven.toast.Notifications;
+import util.MyDate;
 import util.swing.MyJTextField;
 import util.swing.MyJScrollPane;
 import util.swing.MySubtitle;
@@ -34,6 +39,12 @@ public class Form_FilterApplications extends CrazyPanel {
     ArrayList<JCheckBox> selectedCOV = new ArrayList();
     TablePanel outputPanel;
     JLabel totalApplication = new JLabel("0");
+    MyJTextField fromDateInput = new MyJTextField("From(01-01-2023)");
+    MyJTextField toDateInput = new MyJTextField("to(01-01-2024)");
+    JCheckBox todyaChk = new JCheckBox();
+    MyJTextField resentInput = new MyJTextField(SystemStrings.RESENT_INPUT);
+    MyJTextField completeAppInput = new MyJTextField(SystemStrings.COMPLETE_APP_NO_INPUT);
+    MyJTextField expiredAppInput = new MyJTextField(SystemStrings.EXPIRED_APP_NO_INPUT);
 
     public Form_FilterApplications() {
 
@@ -64,26 +75,25 @@ public class Form_FilterApplications extends CrazyPanel {
         dateFilterPanel.setBackground(Color.white);
         dateFilterPanel.add(new MySubtitle("Date Filter"), "wrap,span,al center");
         dateFilterPanel.add(new JLabel("Date"), "al right");
-        dateFilterPanel.add(new MyJTextField("From"), "pushx,growx");
-        dateFilterPanel.add(new MyJTextField("To"), "wrap,pushx,growx");
+        dateFilterPanel.add(fromDateInput, "pushx,growx");
+        dateFilterPanel.add(toDateInput, "wrap,pushx,growx");
 
         dateFilterPanel.add(new JLabel("Completed On"), "al right");
-        dateFilterPanel.add(new MyJTextField("11/11/2024"), "span,wrap,pushx,growx");
+        dateFilterPanel.add(completeAppInput, "span,wrap,pushx,growx");
 
         dateFilterPanel.add(new JLabel("Expired On"), "al right");
-        dateFilterPanel.add(new MyJTextField("11/11/2024"), "span,wrap,pushx,growx");
+        dateFilterPanel.add(expiredAppInput, "span,wrap,pushx,growx");
 
         JPanel totalApplicationsPanel = new JPanel(new MigLayout());
         totalApplicationsPanel.setBackground(Color.white);
         totalApplicationsPanel.add(new MySubtitle("Other Filters"), "wrap 15,span,al center");
         totalApplicationsPanel.add(new JLabel("Today"), "al right ");
-        totalApplicationsPanel.add(new JCheckBox(), "wrap");
+        totalApplicationsPanel.add(todyaChk, "wrap");
 
-        totalApplicationsPanel.add(new JLabel("Previous Month"), "al right");
-        totalApplicationsPanel.add(new JCheckBox(), "wrap");
-
+//        totalApplicationsPanel.add(new JLabel("Previous Month"), "al right");
+//        totalApplicationsPanel.add(new JCheckBox(), "wrap");
         totalApplicationsPanel.add(new JLabel("Resent"), "al right");
-        totalApplicationsPanel.add(new MyJTextField("5"), "span,wrap,growx");
+        totalApplicationsPanel.add(resentInput, "span,wrap,growx");
 
         inputPanel.add(covPanel, "growx");
         inputPanel.add(dateFilterPanel, "growx");
@@ -108,7 +118,34 @@ public class Form_FilterApplications extends CrazyPanel {
 
         });
         infoPanel.add(clear, "al right");
-        infoPanel.add(new MySubmitButton("Print"), "wrap,al left");
+        MySubmitButton search = new MySubmitButton("Search");
+        search.addActionListener((e) -> {
+            UserDao userDao = new UserDao();
+
+            try {
+                clearTable();
+                if (!completeAppInput.getText().equals(SystemStrings.COMPLETE_APP_NO_INPUT)) {
+                    java.sql.Date to = MyDate.getSQLDate(completeAppInput.getText());
+                    setTable(userDao.getAllUserDetailsCompletedOn(to));
+                } 
+                else if(!expiredAppInput.getText().equals(SystemStrings.EXPIRED_APP_NO_INPUT))
+                {
+                    java.sql.Date to = MyDate.getSQLDate(expiredAppInput.getText());
+                    setTable(userDao.getAllUserDetailsExpiredOn(to));
+                }
+                else {
+                    java.sql.Date from = MyDate.getSQLDate(fromDateInput.getText());
+                    java.sql.Date to = MyDate.getSQLDate(toDateInput.getText());
+                    setTable(userDao.getAllUserDetailsUpTo(from, to));
+                }
+
+            } catch (Exception exp) {
+                Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_RIGHT, "Enter valid dates.");
+
+            }
+
+        });
+        infoPanel.add(search, "wrap,al left");
         infoPanel.setBackground(Color.white);
         pagePanel.add(infoPanel, "wrap,growx");
 
@@ -127,6 +164,16 @@ public class Form_FilterApplications extends CrazyPanel {
 
         add(new MyJScrollPane(pagePanel), "growx");
 
+        todyaChk.addItemListener((e) -> {
+            if (todyaChk.isSelected()) {
+                clearTable();
+                setTable(new UserDao().getTodayAllUserDetails());
+            } else {
+                clearTable();
+            }
+        });
+
+        addDLOnResentInput();
     }
 
     public void addCheckBox(JPanel covpanel) {
@@ -134,11 +181,17 @@ public class Form_FilterApplications extends CrazyPanel {
 
         int size = allCOV.length;
         JCheckBox allChk = new JCheckBox("ALL");
+        allChk.setSelected(true);
+
         covpanel.add(allChk, "al left");
         allChk.addItemListener((i) -> {
-            UserDao userDao = new UserDao();
-            ArrayList<User> allUser = userDao.getAllUserDetails();
-            setTable(allUser);
+            if (allChk.isSelected()) {
+                UserDao userDao = new UserDao();
+                ArrayList<User> allUser = userDao.getAllUserDetails();
+                setTable(allUser);
+            } else {
+                clearTable();
+            }
 
         });
 
@@ -195,6 +248,45 @@ public class Form_FilterApplications extends CrazyPanel {
             String fullName = new FullName(user).getFullName();
             outputPanel.addRow(new Object[]{user.getId(), fullName, llApplication.getApp_no(), user.getMobileNumber(), llApplication.getApp_date(), llApplication.getStatus()});
         }
+    }
+
+    public void clearTable() {
+        outputPanel.removeAllRow();
+    }
+
+    public void addDLOnResentInput() {
+        DocumentListener dl = new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                updateFieldState();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                updateFieldState();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                updateFieldState();
+            }
+
+            void updateFieldState() {
+                try {
+                    if (resentInput.getText().length() != 0 && !resentInput.getText().equals(SystemStrings.RESENT_INPUT)) {
+                        int n = Integer.parseInt(resentInput.getText());
+                        clearTable();
+                        setTable(new UserDao().getResentNUserDetails(n));
+                    }
+                } catch (Exception exp) {
+
+                    Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_RIGHT, "Enter valid number.");
+
+                }
+            }
+        };
+        resentInput.getDocument().addDocumentListener(dl);
+
     }
 
 }
