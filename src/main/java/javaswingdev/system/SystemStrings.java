@@ -25,6 +25,8 @@ public class SystemStrings {
     public final static String RESENT_INPUT = "Enter Number";
     public final static String COMPLETE_APP_NO_INPUT = "10-10-2024";
     public final static String EXPIRED_APP_NO_INPUT = "10-10-2024";
+    public final static String FROM_DATE_INPUT = "from(10-10-2024)";
+    public final static String TO_DATE_INPUT = "to(10-10-2024)";
 
     
     public final static String[] APPLICATION_STATUS = new String[]{"Pending", "Completed"};

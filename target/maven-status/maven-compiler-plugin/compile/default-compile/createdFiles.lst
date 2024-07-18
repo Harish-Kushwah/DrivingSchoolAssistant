@@ -1,3 +1,4 @@
+javaswingdev\form\Form_FilterApplications$3.class
 javaswingdev\form\Form_NewApplication.class
 javaswingdev\menu\Item$2.class
 javaswingdev\main\Main$2.class
@@ -52,6 +53,7 @@ util\swing\button\MyResetButton.class
 model\dao\ApplicationCOVDao.class
 javaswingdev\form\Form_Empty.class
 javaswingdev\form\Form_UpdateApplications.class
+javaswingdev\form\Form_FilterApplications$2.class
 model\helper\ConnectionProvider.class
 javaswingdev\swing\table\TablePanel.class
 jnafilechooser\api\JnaFileChooser$Mode.class
@@ -77,6 +79,7 @@ jnafilechooser\api\WindowsFolderBrowser.class
 util\GradientPanel.class
 javaswingdev\menu\ModelMenuItem.class
 javaswingdev\menu\Item.class
+javaswingdev\form\Form_FilterApplications$4.class
 javaswingdev\swing\table\TablePanel$1.class
 javaswingdev\system\SystemColor.class
 jnafilechooser\api\WindowsFileChooser.class

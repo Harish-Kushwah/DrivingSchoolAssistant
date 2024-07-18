@@ -1,7 +1,8 @@
 package javaswingdev.form;
 
 import java.awt.Color;
-import java.sql.Timestamp;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import javaswingdev.swing.RoundPanel;
 import javaswingdev.swing.table.TablePanel;
@@ -39,9 +40,9 @@ public class Form_FilterApplications extends CrazyPanel {
     ArrayList<JCheckBox> selectedCOV = new ArrayList();
     TablePanel outputPanel;
     JLabel totalApplication = new JLabel("0");
-    MyJTextField fromDateInput = new MyJTextField("From(01-01-2023)");
-    MyJTextField toDateInput = new MyJTextField("to(01-01-2024)");
-    JCheckBox todyaChk = new JCheckBox();
+    MyJTextField fromDateInput = new MyJTextField(SystemStrings.FROM_DATE_INPUT);
+    MyJTextField toDateInput = new MyJTextField(SystemStrings.TO_DATE_INPUT);
+    JCheckBox todayChk = new JCheckBox();
     MyJTextField resentInput = new MyJTextField(SystemStrings.RESENT_INPUT);
     MyJTextField completeAppInput = new MyJTextField(SystemStrings.COMPLETE_APP_NO_INPUT);
     MyJTextField expiredAppInput = new MyJTextField(SystemStrings.EXPIRED_APP_NO_INPUT);
@@ -88,7 +89,7 @@ public class Form_FilterApplications extends CrazyPanel {
         totalApplicationsPanel.setBackground(Color.white);
         totalApplicationsPanel.add(new MySubtitle("Other Filters"), "wrap 15,span,al center");
         totalApplicationsPanel.add(new JLabel("Today"), "al right ");
-        totalApplicationsPanel.add(todyaChk, "wrap");
+        totalApplicationsPanel.add(todayChk, "wrap");
 
 //        totalApplicationsPanel.add(new JLabel("Previous Month"), "al right");
 //        totalApplicationsPanel.add(new JCheckBox(), "wrap");
@@ -121,24 +122,22 @@ public class Form_FilterApplications extends CrazyPanel {
         MySubmitButton search = new MySubmitButton("Search");
         search.addActionListener((e) -> {
             UserDao userDao = new UserDao();
-
             try {
                 clearTable();
                 if (!completeAppInput.getText().equals(SystemStrings.COMPLETE_APP_NO_INPUT)) {
                     java.sql.Date to = MyDate.getSQLDate(completeAppInput.getText());
                     setTable(userDao.getAllUserDetailsCompletedOn(to));
-                } 
-                else if(!expiredAppInput.getText().equals(SystemStrings.EXPIRED_APP_NO_INPUT))
-                {
+
+                } else if (!expiredAppInput.getText().equals(SystemStrings.EXPIRED_APP_NO_INPUT)) {
                     java.sql.Date to = MyDate.getSQLDate(expiredAppInput.getText());
                     setTable(userDao.getAllUserDetailsExpiredOn(to));
-                }
-                else {
+                } else {
                     java.sql.Date from = MyDate.getSQLDate(fromDateInput.getText());
                     java.sql.Date to = MyDate.getSQLDate(toDateInput.getText());
                     setTable(userDao.getAllUserDetailsUpTo(from, to));
-                }
 
+                }
+                
             } catch (Exception exp) {
                 Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_RIGHT, "Enter valid dates.");
 
@@ -164,8 +163,8 @@ public class Form_FilterApplications extends CrazyPanel {
 
         add(new MyJScrollPane(pagePanel), "growx");
 
-        todyaChk.addItemListener((e) -> {
-            if (todyaChk.isSelected()) {
+        todayChk.addItemListener((e) -> {
+            if (todayChk.isSelected()) {
                 clearTable();
                 setTable(new UserDao().getTodayAllUserDetails());
             } else {
@@ -174,6 +173,32 @@ public class Form_FilterApplications extends CrazyPanel {
         });
 
         addDLOnResentInput();
+
+        fromDateInput.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                completeAppInput.setPlaceholder(SystemStrings.COMPLETE_APP_NO_INPUT);
+                expiredAppInput.setPlaceholder(SystemStrings.EXPIRED_APP_NO_INPUT);
+            }
+        });
+        completeAppInput.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                fromDateInput.setPlaceholder(SystemStrings.FROM_DATE_INPUT);
+                expiredAppInput.setPlaceholder(SystemStrings.EXPIRED_APP_NO_INPUT);
+                toDateInput.setPlaceholder(SystemStrings.TO_DATE_INPUT);
+            }
+        });
+        expiredAppInput.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                completeAppInput.setPlaceholder(SystemStrings.COMPLETE_APP_NO_INPUT);
+                fromDateInput.setPlaceholder(SystemStrings.FROM_DATE_INPUT);
+                toDateInput.setPlaceholder(SystemStrings.TO_DATE_INPUT);
+
+            }
+        });
+
     }
 
     public void addCheckBox(JPanel covpanel) {
@@ -240,6 +265,10 @@ public class Form_FilterApplications extends CrazyPanel {
 
     public void setTable(ArrayList<User> allUser) {
 
+        if(allUser.isEmpty()){
+             Notifications.getInstance().show(Notifications.Type.INFO, Notifications.Location.TOP_RIGHT, "No Applications Found");
+        }
+        else{
         ApplicationDao appDao = new ApplicationDao();
         LLApplicationDao llAppDao = new LLApplicationDao();
         totalApplication.setText(Integer.toString(allUser.size()));
@@ -248,6 +277,7 @@ public class Form_FilterApplications extends CrazyPanel {
             String fullName = new FullName(user).getFullName();
             outputPanel.addRow(new Object[]{user.getId(), fullName, llApplication.getApp_no(), user.getMobileNumber(), llApplication.getApp_date(), llApplication.getStatus()});
         }
+      }
     }
 
     public void clearTable() {
