@@ -21,8 +21,12 @@ import util.swing.button.MySubmitButton;
  */
 public class Form_PaymentHistory extends CrazyPanel {
 
+    MyJTextField firstName = new MyJTextField("First Name");
+    MyJTextField middleName = new MyJTextField("Middle Name");
+    MyJTextField lastName = new MyJTextField("Last Name");
+    MyJTextField mobileNo = new MyJTextField("Enter Mobile No");
     public Form_PaymentHistory() {
-        
+                
         setLayout(new MigLayout("fillx , insets 10 "));
         
         //===================================================================================
@@ -54,9 +58,9 @@ public class Form_PaymentHistory extends CrazyPanel {
         inputPanel.add(new JLabel("Middle Name"), "al right,growx");
         inputPanel.add(new JLabel("Last Name"), "al right,wrap,growx");
         
-        inputPanel.add(new MyJTextField("First Name"), "pushx,growx");
-        inputPanel.add(new MyJTextField("Middle Name"), "pushx,growx");
-        inputPanel.add(new MyJTextField("Last Name"), "wrap,pushx,growx");
+        inputPanel.add(firstName, "pushx,growx");
+        inputPanel.add(middleName, "pushx,growx");
+        inputPanel.add(lastName, "wrap,pushx,growx");
 
         inputPanel.add(new JLabel("Mobile No"), "al right,growx");
         inputPanel.add(new JLabel("Email"), "al right,growx");
